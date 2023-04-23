@@ -6,7 +6,7 @@ from generated.python.helloworld import GreeterStub, HelloRequest
 
 
 async def main():
-    channel = Channel(host="localhost", port=50051)
+    channel = Channel(host="localhost", port=3000)
     service = GreeterStub(channel)
     response = await service.say_hello(HelloRequest(name="world"))
     print(response)
