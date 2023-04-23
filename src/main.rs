@@ -4,7 +4,7 @@ use hello_world::{HelloReply, HelloRequest};
 use hello_world::greeter_server::{Greeter, GreeterServer};
 
 pub mod hello_world {
-    include!(concat!(env!("CARGO_MANIFEST_DIR"), "/generated/helloworld.rs"));
+    include!(concat!(env!("CARGO_MANIFEST_DIR"), "/generated/rust/helloworld.rs"));
 }
 
 #[derive(Debug, Default)]

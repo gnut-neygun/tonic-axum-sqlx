@@ -1,6 +1,7 @@
 version: v1
 managed:
   enabled: true
+  # We don't generate go code but it's still needed
   go_package_prefix:
     default: github.com/bufbuild/buf-tour/gen
 plugins:
@@ -8,4 +9,17 @@ plugins:
     out: generated/python
     opt: paths=source_relative
     # See: https://github.com/stephenh/ts-proto/issues/366
+    strategy: all
+  # This will invoke protoc-gen-es and write output to src/gen
+  - plugin: buf.build/bufbuild/connect-web
+    out: generated/typescript
+    opt: target=ts
+  # This will invoke protoc-gen-connect-es
+  - plugin: buf.build/bufbuild/es
+    out: generated/typescript
+    opt:
+      # Add more plugin options here
+      - target=ts
+  - plugin: openapi
+    out: generated
     strategy: all

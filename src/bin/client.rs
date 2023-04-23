@@ -2,7 +2,7 @@ use hello_world::greeter_client::GreeterClient;
 use hello_world::HelloRequest;
 
 pub mod hello_world {
-    include!(concat!(env!("CARGO_MANIFEST_DIR"), "/generated/helloworld.rs"));
+    include!(concat!(env!("CARGO_MANIFEST_DIR"), "/generated/rust/helloworld.rs"));
 }
 
 #[tokio::main]

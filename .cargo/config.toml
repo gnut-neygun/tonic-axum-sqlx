@@ -1,3 +1,0 @@
-[env]
-PROTOC_PATH = "./bin-deps/protoc-22.3-linux-x86_64"
-PROTOC_GEN_OPENAPI_PATH = "./bin-deps/protoc-22.3-linux-x86_64"
