@@ -1,0 +1,11 @@
+version: v1
+managed:
+  enabled: true
+  go_package_prefix:
+    default: github.com/bufbuild/buf-tour/gen
+plugins:
+  - plugin: python_betterproto
+    out: generated/python
+    opt: paths=source_relative
+    # See: https://github.com/stephenh/ts-proto/issues/366
+    strategy: all
