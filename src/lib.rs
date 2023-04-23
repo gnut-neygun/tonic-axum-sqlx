@@ -1,10 +1,8 @@
 use tonic::Status;
-use hello_world::{HelloReply, HelloRequest};
-use hello_world::greeter_server::{Greeter};
+use crate::generated::helloworld::greeter_server::Greeter;
+use crate::generated::helloworld::{HelloReply, HelloRequest};
 
-pub mod hello_world {
-    include!(concat!(env!("CARGO_MANIFEST_DIR"), "/generated/rust/helloworld.rs"));
-}
+pub mod generated;
 
 #[derive(Debug, Default)]
 pub struct MyGreeter {}
@@ -17,7 +15,7 @@ impl Greeter for MyGreeter {
     ) -> Result<tonic::Response<HelloReply>, Status> { // Return an instance of type HelloReply
         println!("Got a request: {:?}", request);
 
-        let reply = hello_world::HelloReply {
+        let reply = HelloReply {
             message: format!("Hello {}!", request.into_inner().name).into(), // We must use .into_inner() as the fields of gRPC requests and responses are private
         };
 

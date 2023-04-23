@@ -8,18 +8,18 @@ plugins:
   - plugin: python_betterproto
     out: generated/python
     opt: paths=source_relative
-    # See: https://github.com/stephenh/ts-proto/issues/366
+    # On why need strategy all, See: https://github.com/stephenh/ts-proto/issues/366
     strategy: all
-  # This will invoke protoc-gen-es and write output to src/gen
   - plugin: buf.build/bufbuild/connect-web
     out: generated/typescript
-    opt: target=ts
-  # This will invoke protoc-gen-connect-es
+    opt:
+      - target=ts
   - plugin: buf.build/bufbuild/es
     out: generated/typescript
     opt:
-      # Add more plugin options here
       - target=ts
   - plugin: openapi
     out: generated
     strategy: all
+    opt:
+
