@@ -1,19 +1,15 @@
-use hello_world::greeter_client::GreeterClient;
-use hello_world::HelloRequest;
-
-pub mod hello_world {
-    include!(concat!(env!("CARGO_MANIFEST_DIR"), "/generated/rust/helloworld.rs"));
-}
+use tonic_axum_sqlx::generated::object_api::object_api_client::ObjectApiClient;
+use tonic_axum_sqlx::generated::object_api::ObjectId;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut client = GreeterClient::connect("http://localhost:3000").await?;
+    let mut client = ObjectApiClient::connect("http://localhost:3000").await?;
 
-    let request = tonic::Request::new(HelloRequest {
-        name: "Tonic".into(),
+    let request = tonic::Request::new(ObjectId {
+        id: 1
     });
 
-    let response = client.say_hello(request).await?;
+    let response = client.get_object(request).await?;
 
     println!("RESPONSE={:?}", response);
 

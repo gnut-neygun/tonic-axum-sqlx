@@ -33,8 +33,6 @@ pub struct ObjectId {
 pub mod object_api_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
 
-    use std::convert::TryInto;
-
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
 
@@ -261,9 +259,6 @@ pub mod object_api_client {
 /// Generated server implementations.
 pub mod object_api_server {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-
-    use std::sync::Arc;
-    use std::task::{Context, Poll};
 
     use tonic::codegen::*;
 
