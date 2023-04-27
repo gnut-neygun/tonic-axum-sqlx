@@ -1,30 +1,37 @@
+#![allow(unused_variables)]
+#![allow(dead_code)]
+#![allow(non_snake_case)]
+#![allow(non_camel_case_types)]
+
 use std::net::SocketAddr;
 
 use axum::response::IntoResponse;
 use axum::routing::get;
 
-use tonic_axum_sqlx::generated::helloworld::greeter_server::GreeterServer;
-use tonic_axum_sqlx::MyGreeter;
+use routes::ObjectService;
+use tonic_axum_sqlx::generated::object_api::object_api_server::ObjectApiServer;
 
-mod axum_tonic_glue;
+mod grpc_rest_multiplex;
+mod routes;
+mod utils;
 
 #[tokio::main]
 async fn main() {
     let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
-    let greeter_service = GreeterServer::new(MyGreeter::default());
+    let object_service = ObjectApiServer::new(ObjectService::default());
 
     let axum_service = axum::Router::new()
-        .route("/docs", get(swagger_ui))
-        .route("/", get(|| async { "Hello world!" }))
+        .nest("/api", routes::object_route())
+        .route("/", get(swagger_ui))
         .route("/docs/openapi.yaml", get(openapi_doc))
         .into_make_service();
 
     let grpc_service = tonic::transport::Server::builder()
         .accept_http1(true)
-        .add_service(tonic_web::enable(greeter_service))
+        .add_service(tonic_web::enable(object_service))
         .into_service();
 
-    let hybrid_service = axum_tonic_glue::make_hybrid_service(axum_service, grpc_service);
+    let hybrid_service = grpc_rest_multiplex::make_hybrid_service(axum_service, grpc_service);
 
     let server = hyper::Server::bind(&addr).serve(hybrid_service);
 

@@ -1,23 +1,61 @@
 syntax = "proto3";
-package helloworld;
+package object_api;
 import "google/api/annotations.proto";
+// Wrapper for all primitive types
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
 
-
-message HelloRequest {
-  // Request message contains the name to be greeted
-  string name = 1;
+message Object{
+  uint64 id = 1;
+  string name = 2;
+  map<string, string> properties = 3;
 }
 
-message HelloReply {
-  // Reply contains the greeting message
-  string message = 1;
+message ObjectList{
+  repeated Object objects = 1;
 }
 
-service Greeter {
-  // Our SayHello rpc accepts HelloRequests and returns HelloReplies
-  rpc SayHello (HelloRequest) returns (HelloReply){
+message ObjectId{
+  uint64 id = 1;
+}
+
+service ObjectApi {
+
+  rpc list_objects (google.protobuf.Empty) returns (ObjectList){
     option (google.api.http) = {
-      get: "/api/greeting"
+      get: "/api/objects"
+    };
+  };
+
+  rpc get_object (ObjectId) returns (Object){
+    option (google.api.http) = {
+      get: "/api/object/{id}"
+    };
+  };
+
+  rpc create_object(Object) returns (Object){
+    option (google.api.http) = {
+      post: "/api/object"
+      body: "*"
+    };
+  };
+
+  rpc update_object(Object) returns (Object){
+    option (google.api.http) = {
+      put: "/api/object"
+      body: "*"
+    };
+  };
+
+  rpc delete_object(ObjectId) returns (google.protobuf.Empty){
+    option (google.api.http) = {
+      delete: "/api/object/{id}"
+    };
+  };
+
+  rpc subscribe_object(ObjectId) returns (stream Object){
+    option (google.api.http) = {
+      get: "/api/object/{id}/subscribe"
     };
   };
 }
