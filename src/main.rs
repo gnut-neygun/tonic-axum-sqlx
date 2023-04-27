@@ -1,4 +1,8 @@
 use std::net::SocketAddr;
+
+use axum::response::IntoResponse;
+use axum::routing::get;
+
 use tonic_axum_sqlx::generated::helloworld::greeter_server::GreeterServer;
 use tonic_axum_sqlx::MyGreeter;
 
@@ -10,7 +14,9 @@ async fn main() {
     let greeter_service = GreeterServer::new(MyGreeter::default());
 
     let axum_service = axum::Router::new()
-        .route("/", axum::routing::get(|| async { "Hello world!" }))
+        .route("/docs", get(swagger_ui))
+        .route("/", get(|| async { "Hello world!" }))
+        .route("/docs/openapi.yaml", get(openapi_doc))
         .into_make_service();
 
     let grpc_service = tonic::transport::Server::builder()
@@ -25,4 +31,14 @@ async fn main() {
     if let Err(e) = server.await {
         eprintln!("server error: {}", e);
     }
+}
+
+async fn openapi_doc() -> impl IntoResponse {
+    let api_doc = include_str!("../generated/openapi.yaml");
+    api_doc
+}
+
+async fn swagger_ui() -> impl IntoResponse {
+    let html_string = include_str!("../assets/swagger.html");
+    axum::response::Html(html_string)
 }
