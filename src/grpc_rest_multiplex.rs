@@ -1,187 +1,119 @@
-use std::future::Future;
-use std::pin::Pin;
-use std::task::Poll;
+use std::{
+    convert::Infallible,
+    task::{Context, Poll},
+};
 
-use axum::http::{HeaderMap, Request, Response};
-use hyper::Body;
-use hyper::service::Service;
-use pin_project::pin_project;
-use tonic::codegen::Body as HttpBody;
+use axum::{
+    http::header::CONTENT_TYPE,
+    response::{IntoResponse, Response},
+};
+use axum::http::Request;
+use futures::{future::BoxFuture, ready};
+use tower::Service;
 
-pub fn make_hybrid_service<MakeWeb, Grpc>(make_web: MakeWeb, grpc: Grpc) -> HybridMakeService<MakeWeb, Grpc> {
-    HybridMakeService { make_web, grpc }
+pub struct MultiplexService<A, B> {
+    rest: A,
+    rest_ready: bool,
+    grpc: B,
+    grpc_ready: bool,
 }
 
-pub struct HybridMakeService<MakeWeb, Grpc> {
-    make_web: MakeWeb,
-    grpc: Grpc,
-}
-
-impl<ConnInfo, MakeWeb, Grpc> Service<ConnInfo> for HybridMakeService<MakeWeb, Grpc>
-    where
-        MakeWeb: Service<ConnInfo>,
-        Grpc: Clone,
-{
-    type Response = HybridService<MakeWeb::Response, Grpc>;
-    type Error = MakeWeb::Error;
-    type Future = HybridMakeServiceFuture<MakeWeb::Future, Grpc>;
-
-    fn poll_ready(
-        &mut self,
-        cx: &mut std::task::Context,
-    ) -> Poll<Result<(), Self::Error>> {
-        self.make_web.poll_ready(cx)
-    }
-
-    fn call(&mut self, conn_info: ConnInfo) -> Self::Future {
-        HybridMakeServiceFuture {
-            web_future: self.make_web.call(conn_info),
-            grpc: Some(self.grpc.clone()),
+impl<A, B> MultiplexService<A, B> {
+    pub fn new(rest: A, grpc: B) -> Self {
+        Self {
+            rest,
+            rest_ready: false,
+            grpc,
+            grpc_ready: false,
         }
     }
 }
 
-#[pin_project]
-pub struct HybridMakeServiceFuture<WebFuture, Grpc> {
-    #[pin]
-    web_future: WebFuture,
-    grpc: Option<Grpc>,
-}
-
-impl<WebFuture, Web, WebError, Grpc> Future for HybridMakeServiceFuture<WebFuture, Grpc>
+impl<A, B> Clone for MultiplexService<A, B>
     where
-        WebFuture: Future<Output=Result<Web, WebError>>,
+        A: Clone,
+        B: Clone,
 {
-    type Output = Result<HybridService<Web, Grpc>, WebError>;
-
-    fn poll(self: Pin<&mut Self>, cx: &mut std::task::Context) -> Poll<Self::Output> {
-        let this = self.project();
-        match this.web_future.poll(cx) {
-            Poll::Pending => Poll::Pending,
-            Poll::Ready(Err(e)) => Poll::Ready(Err(e)),
-            Poll::Ready(Ok(web)) => Poll::Ready(Ok(HybridService {
-                web,
-                grpc: this.grpc.take().expect("Cannot poll twice!"),
-            })),
+    fn clone(&self) -> Self {
+        Self {
+            rest: self.rest.clone(),
+            grpc: self.grpc.clone(),
+            // the cloned services probably wont be ready
+            rest_ready: false,
+            grpc_ready: false,
         }
     }
 }
 
-pub struct HybridService<Web, Grpc> {
-    web: Web,
-    grpc: Grpc,
-}
-
-impl<Web, Grpc, WebBody, GrpcBody> Service<Request<Body>> for HybridService<Web, Grpc>
+impl<A, B> Service<Request<hyper::Body>> for MultiplexService<A, B>
     where
-        Web: Service<Request<Body>, Response=Response<WebBody>>,
-        Grpc: Service<Request<Body>, Response=Response<GrpcBody>>,
-        Web::Error: Into<Box<dyn std::error::Error + Send + Sync + 'static>>,
-        Grpc::Error: Into<Box<dyn std::error::Error + Send + Sync + 'static>>,
+        A: Service<Request<hyper::Body>, Error=Infallible>,
+        A::Response: IntoResponse,
+        A::Future: Send + 'static,
+        B: Service<Request<hyper::Body>>,
+        B::Response: IntoResponse,
+        B::Future: Send + 'static,
 {
-    type Response = Response<HybridBody<WebBody, GrpcBody>>;
-    type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
-    type Future = HybridFuture<Web::Future, Grpc::Future>;
+    type Response = Response;
+    type Error = B::Error;
+    type Future = BoxFuture<'static, Result<Self::Response, Self::Error>>;
 
-    fn poll_ready(
-        &mut self,
-        cx: &mut std::task::Context<'_>,
-    ) -> Poll<Result<(), Self::Error>> {
-        match self.web.poll_ready(cx) {
-            Poll::Ready(Ok(())) => match self.grpc.poll_ready(cx) {
-                Poll::Ready(Ok(())) => Poll::Ready(Ok(())),
-                Poll::Ready(Err(e)) => Poll::Ready(Err(e.into())),
-                Poll::Pending => Poll::Pending,
-            },
-            Poll::Ready(Err(e)) => Poll::Ready(Err(e.into())),
-            Poll::Pending => Poll::Pending,
+    fn poll_ready(&mut self, cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
+        // drive readiness for each inner service and record which is ready
+        loop {
+            match (self.rest_ready, self.grpc_ready) {
+                (true, true) => {
+                    return Ok(()).into();
+                }
+                (false, _) => {
+                    ready!(self.rest.poll_ready(cx)).map_err(|err| match err {})?;
+                    self.rest_ready = true;
+                }
+                (_, false) => {
+                    ready!(self.grpc.poll_ready(cx))?;
+                    self.grpc_ready = true;
+                }
+            }
         }
     }
 
-    fn call(&mut self, req: Request<Body>) -> Self::Future {
-        if req.headers().get("content-type").map(|x| x.as_bytes()) == Some(b"application/grpc") {
-            HybridFuture::Grpc(self.grpc.call(req))
+    //noinspection RsUnresolvedReference
+    fn call(&mut self, req: Request<hyper::Body>) -> Self::Future {
+        // require users to call `poll_ready` first, if they don't we're allowed to panic
+        // as per the `tower::Service` contract
+        assert!(
+            self.grpc_ready,
+            "grpc service not ready. Did you forget to call `poll_ready`?"
+        );
+        assert!(
+            self.rest_ready,
+            "rest service not ready. Did you forget to call `poll_ready`?"
+        );
+
+        // if we get a grpc request call the grpc service, otherwise call the rest service
+        // when calling a service it becomes not-ready so we have drive readiness again
+        if is_grpc_request(&req) {
+            self.grpc_ready = false;
+            let future = self.grpc.call(req);
+            Box::pin(async move {
+                let res = future.await?;
+                Ok(res.into_response())
+            })
         } else {
-            HybridFuture::Web(self.web.call(req))
+            self.rest_ready = false;
+            let future = self.rest.call(req);
+            Box::pin(async move {
+                let res = future.await.map_err(|err| match err {})?;
+                Ok(res.into_response())
+            })
         }
     }
 }
 
-#[pin_project(project = HybridBodyProj)]
-pub enum HybridBody<WebBody, GrpcBody> {
-    Web(#[pin] WebBody),
-    Grpc(#[pin] GrpcBody),
-}
-
-impl<WebBody, GrpcBody> HttpBody for HybridBody<WebBody, GrpcBody>
-    where
-        WebBody: HttpBody + Send + Unpin,
-        GrpcBody: HttpBody<Data=WebBody::Data> + Send + Unpin,
-        WebBody::Error: std::error::Error + Send + Sync + 'static,
-        GrpcBody::Error: std::error::Error + Send + Sync + 'static,
-{
-    type Data = WebBody::Data;
-    type Error = Box<dyn std::error::Error + Send + Sync + 'static>;
-
-    fn poll_data(
-        self: Pin<&mut Self>,
-        cx: &mut std::task::Context,
-    ) -> Poll<Option<Result<Self::Data, Self::Error>>> {
-        match self.project() {
-            HybridBodyProj::Web(b) => b.poll_data(cx).map_err(|e| e.into()),
-            HybridBodyProj::Grpc(b) => b.poll_data(cx).map_err(|e| e.into()),
-        }
-    }
-
-    fn poll_trailers(
-        self: Pin<&mut Self>,
-        cx: &mut std::task::Context,
-    ) -> Poll<Result<Option<HeaderMap>, Self::Error>> {
-        match self.project() {
-            HybridBodyProj::Web(b) => b.poll_trailers(cx).map_err(|e| e.into()),
-            HybridBodyProj::Grpc(b) => b.poll_trailers(cx).map_err(|e| e.into()),
-        }
-    }
-
-    fn is_end_stream(&self) -> bool {
-        match self {
-            HybridBody::Web(b) => b.is_end_stream(),
-            HybridBody::Grpc(b) => b.is_end_stream(),
-        }
-    }
-}
-
-#[pin_project(project = HybridFutureProj)]
-pub enum HybridFuture<WebFuture, GrpcFuture> {
-    Web(#[pin] WebFuture),
-    Grpc(#[pin] GrpcFuture),
-}
-
-impl<WebFuture, GrpcFuture, WebBody, GrpcBody, WebError, GrpcError> Future
-for HybridFuture<WebFuture, GrpcFuture>
-    where
-        WebFuture: Future<Output=Result<Response<WebBody>, WebError>>,
-        GrpcFuture: Future<Output=Result<Response<GrpcBody>, GrpcError>>,
-        WebError: Into<Box<dyn std::error::Error + Send + Sync + 'static>>,
-        GrpcError: Into<Box<dyn std::error::Error + Send + Sync + 'static>>,
-{
-    type Output = Result<
-        Response<HybridBody<WebBody, GrpcBody>>,
-        Box<dyn std::error::Error + Send + Sync + 'static>,
-    >;
-
-    fn poll(self: Pin<&mut Self>, cx: &mut std::task::Context) -> Poll<Self::Output> {
-        match self.project() {
-            HybridFutureProj::Web(a) => match a.poll(cx) {
-                Poll::Ready(Ok(res)) => Poll::Ready(Ok(res.map(HybridBody::Web))),
-                Poll::Ready(Err(e)) => Poll::Ready(Err(e.into())),
-                Poll::Pending => Poll::Pending,
-            },
-            HybridFutureProj::Grpc(b) => match b.poll(cx) {
-                Poll::Ready(Ok(res)) => Poll::Ready(Ok(res.map(HybridBody::Grpc))),
-                Poll::Ready(Err(e)) => Poll::Ready(Err(e.into())),
-                Poll::Pending => Poll::Pending,
-            },
-        }
-    }
+fn is_grpc_request<B>(req: &Request<B>) -> bool {
+    req.headers()
+        .get(CONTENT_TYPE)
+        .map(|content_type| content_type.as_bytes())
+        .filter(|content_type| content_type.starts_with(b"application/grpc"))
+        .is_some()
 }

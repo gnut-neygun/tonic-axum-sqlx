@@ -15,6 +15,8 @@ use tower_http::services::ServeDir;
 use routes::ObjectService;
 use tonic_axum_sqlx::generated::object_api::object_api_server::ObjectApiServer;
 
+use crate::grpc_rest_multiplex::MultiplexService;
+
 mod grpc_rest_multiplex;
 mod routes;
 mod utils;
@@ -27,7 +29,6 @@ pub type SharedState = Arc<AppState>;
 
 #[tokio::main]
 async fn main() {
-    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
     let db_connection_str = std::env::var("DATABASE_URL")
         .unwrap_or_else(|_| "postgres://user:password@localhost:6000/postgres".to_string());
     // setup connection pool
@@ -52,17 +53,25 @@ async fn main() {
         ("assets"))))
         .route("/", get(swagger_ui))
         .route("/docs/openapi.yaml", get(openapi_doc))
-        .with_state(shared_state)
-        .into_make_service();
+        .with_state(shared_state);
+
+    const FILE_DESCRIPTOR_SET: &[u8] = include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), concat!("/src/generated/object_api_descriptor.bin")));
+
+    let reflection_service = tonic_reflection::server::Builder::configure()
+        .register_encoded_file_descriptor_set(FILE_DESCRIPTOR_SET)
+        .build()
+        .unwrap();
 
     let grpc_service = tonic::transport::Server::builder()
         .accept_http1(true)
+        .add_service(reflection_service)
         .add_service(tonic_web::enable(ObjectApiServer::new(object_service)))
         .into_service();
 
-    let hybrid_service = grpc_rest_multiplex::make_hybrid_service(axum_service, grpc_service);
+    let hybrid_service = MultiplexService::new(axum_service, grpc_service);
 
-    let server = hyper::Server::bind(&addr).serve(hybrid_service);
+    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
+    let server = hyper::Server::bind(&addr).serve(tower::make::Shared::new(hybrid_service));
 
     if let Err(e) = server.await {
         eprintln!("server error: {}", e);

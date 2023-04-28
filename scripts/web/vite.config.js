@@ -10,5 +10,5 @@ export default {
             }
         }
     },
-    base: "./", // So that the generated index.html refers js bundle with relative path
+    base: "/static", // So that the generated index.html refers js bundle with relative path
 }
