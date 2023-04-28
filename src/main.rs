@@ -4,11 +4,13 @@
 #![allow(non_camel_case_types)]
 
 use std::net::SocketAddr;
+use std::path::Path;
 use std::sync::Arc;
 
 use axum::response::IntoResponse;
-use axum::routing::get;
+use axum::routing::{get, get_service};
 use sqlx::postgres::PgPoolOptions;
+use tower_http::services::ServeDir;
 
 use routes::ObjectService;
 use tonic_axum_sqlx::generated::object_api::object_api_server::ObjectApiServer;
@@ -41,8 +43,13 @@ async fn main() {
         object_service: object_service.clone()
     });
 
+    let project_root_path = Path::new(env!("CARGO_MANIFEST_DIR"));
+
     let axum_service = axum::Router::new()
         .nest("/api", routes::object_route())
+        // Serve the static test web site that calls the GRPC
+        .nest_service("/static", get_service(ServeDir::new(project_root_path.join
+        ("assets"))))
         .route("/", get(swagger_ui))
         .route("/docs/openapi.yaml", get(openapi_doc))
         .with_state(shared_state)

@@ -24,6 +24,7 @@ pub struct ObjectService {
 #[tonic::async_trait]
 impl ObjectApi for ObjectService {
     async fn list_objects(&self, request: Request<()>) -> Result<Response<ObjectList>, Status> {
+        println!("Got a request: {:?}", request);
         let my_list = query!("SELECT * FROM object")
             .fetch_all(&self.db)
             .await
@@ -42,6 +43,7 @@ impl ObjectApi for ObjectService {
     }
 
     async fn get_object(&self, request: Request<ObjectId>) -> Result<Response<Object>, Status> {
+        println!("Got a request: {:?}", request);
         let my_object = Object {
             id: 1,
             name: String::from("apple"),
