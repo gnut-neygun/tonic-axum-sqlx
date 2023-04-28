@@ -15,6 +15,7 @@ import betterproto.lib.google.protobuf as betterproto_lib_google_protobuf
 import grpclib
 from betterproto.grpc.grpclib_server import ServiceBase
 
+
 if TYPE_CHECKING:
     import grpclib.server
     from betterproto.grpc.grpclib_client import MetadataLike
@@ -42,12 +43,12 @@ class ObjectId(betterproto.Message):
 
 class ObjectApiStub(betterproto.ServiceStub):
     async def list_objects(
-            self,
-            betterproto_lib_google_protobuf_empty: "betterproto_lib_google_protobuf.Empty",
-            *,
-            timeout: Optional[float] = None,
-            deadline: Optional["Deadline"] = None,
-            metadata: Optional["MetadataLike"] = None
+        self,
+        betterproto_lib_google_protobuf_empty: "betterproto_lib_google_protobuf.Empty",
+        *,
+        timeout: Optional[float] = None,
+        deadline: Optional["Deadline"] = None,
+        metadata: Optional["MetadataLike"] = None
     ) -> "ObjectList":
         return await self._unary_unary(
             "/object_api.ObjectApi/list_objects",
@@ -57,14 +58,14 @@ class ObjectApiStub(betterproto.ServiceStub):
             deadline=deadline,
             metadata=metadata,
         )
-    
+
     async def get_object(
-            self,
-            object_id: "ObjectId",
-            *,
-            timeout: Optional[float] = None,
-            deadline: Optional["Deadline"] = None,
-            metadata: Optional["MetadataLike"] = None
+        self,
+        object_id: "ObjectId",
+        *,
+        timeout: Optional[float] = None,
+        deadline: Optional["Deadline"] = None,
+        metadata: Optional["MetadataLike"] = None
     ) -> "Object":
         return await self._unary_unary(
             "/object_api.ObjectApi/get_object",
@@ -74,14 +75,14 @@ class ObjectApiStub(betterproto.ServiceStub):
             deadline=deadline,
             metadata=metadata,
         )
-    
+
     async def create_object(
-            self,
-            object: "Object",
-            *,
-            timeout: Optional[float] = None,
-            deadline: Optional["Deadline"] = None,
-            metadata: Optional["MetadataLike"] = None
+        self,
+        object: "Object",
+        *,
+        timeout: Optional[float] = None,
+        deadline: Optional["Deadline"] = None,
+        metadata: Optional["MetadataLike"] = None
     ) -> "Object":
         return await self._unary_unary(
             "/object_api.ObjectApi/create_object",
@@ -91,14 +92,14 @@ class ObjectApiStub(betterproto.ServiceStub):
             deadline=deadline,
             metadata=metadata,
         )
-    
+
     async def update_object(
-            self,
-            object: "Object",
-            *,
-            timeout: Optional[float] = None,
-            deadline: Optional["Deadline"] = None,
-            metadata: Optional["MetadataLike"] = None
+        self,
+        object: "Object",
+        *,
+        timeout: Optional[float] = None,
+        deadline: Optional["Deadline"] = None,
+        metadata: Optional["MetadataLike"] = None
     ) -> "Object":
         return await self._unary_unary(
             "/object_api.ObjectApi/update_object",
@@ -108,14 +109,14 @@ class ObjectApiStub(betterproto.ServiceStub):
             deadline=deadline,
             metadata=metadata,
         )
-    
+
     async def delete_object(
-            self,
-            object_id: "ObjectId",
-            *,
-            timeout: Optional[float] = None,
-            deadline: Optional["Deadline"] = None,
-            metadata: Optional["MetadataLike"] = None
+        self,
+        object_id: "ObjectId",
+        *,
+        timeout: Optional[float] = None,
+        deadline: Optional["Deadline"] = None,
+        metadata: Optional["MetadataLike"] = None
     ) -> "betterproto_lib_google_protobuf.Empty":
         return await self._unary_unary(
             "/object_api.ObjectApi/delete_object",
@@ -125,89 +126,89 @@ class ObjectApiStub(betterproto.ServiceStub):
             deadline=deadline,
             metadata=metadata,
         )
-    
+
     async def subscribe_object(
-            self,
-            object_id: "ObjectId",
-            *,
-            timeout: Optional[float] = None,
-            deadline: Optional["Deadline"] = None,
-            metadata: Optional["MetadataLike"] = None
+        self,
+        object_id: "ObjectId",
+        *,
+        timeout: Optional[float] = None,
+        deadline: Optional["Deadline"] = None,
+        metadata: Optional["MetadataLike"] = None
     ) -> AsyncIterator["Object"]:
         async for response in self._unary_stream(
-                "/object_api.ObjectApi/subscribe_object",
-                object_id,
-                Object,
-                timeout=timeout,
-                deadline=deadline,
-                metadata=metadata,
+            "/object_api.ObjectApi/subscribe_object",
+            object_id,
+            Object,
+            timeout=timeout,
+            deadline=deadline,
+            metadata=metadata,
         ):
             yield response
 
 
 class ObjectApiBase(ServiceBase):
     async def list_objects(
-            self,
-            betterproto_lib_google_protobuf_empty: "betterproto_lib_google_protobuf.Empty",
+        self,
+        betterproto_lib_google_protobuf_empty: "betterproto_lib_google_protobuf.Empty",
     ) -> "ObjectList":
         raise grpclib.GRPCError(grpclib.const.Status.UNIMPLEMENTED)
-    
+
     async def get_object(self, object_id: "ObjectId") -> "Object":
         raise grpclib.GRPCError(grpclib.const.Status.UNIMPLEMENTED)
-    
+
     async def create_object(self, object: "Object") -> "Object":
         raise grpclib.GRPCError(grpclib.const.Status.UNIMPLEMENTED)
-    
+
     async def update_object(self, object: "Object") -> "Object":
         raise grpclib.GRPCError(grpclib.const.Status.UNIMPLEMENTED)
-    
+
     async def delete_object(
-            self, object_id: "ObjectId"
+        self, object_id: "ObjectId"
     ) -> "betterproto_lib_google_protobuf.Empty":
         raise grpclib.GRPCError(grpclib.const.Status.UNIMPLEMENTED)
-    
+
     async def subscribe_object(self, object_id: "ObjectId") -> AsyncIterator["Object"]:
         raise grpclib.GRPCError(grpclib.const.Status.UNIMPLEMENTED)
-    
+
     async def __rpc_list_objects(
-            self,
-            stream: "grpclib.server.Stream[betterproto_lib_google_protobuf.Empty, ObjectList]",
+        self,
+        stream: "grpclib.server.Stream[betterproto_lib_google_protobuf.Empty, ObjectList]",
     ) -> None:
         request = await stream.recv_message()
         response = await self.list_objects(request)
         await stream.send_message(response)
-    
+
     async def __rpc_get_object(
-            self, stream: "grpclib.server.Stream[ObjectId, Object]"
+        self, stream: "grpclib.server.Stream[ObjectId, Object]"
     ) -> None:
         request = await stream.recv_message()
         response = await self.get_object(request)
         await stream.send_message(response)
-    
+
     async def __rpc_create_object(
-            self, stream: "grpclib.server.Stream[Object, Object]"
+        self, stream: "grpclib.server.Stream[Object, Object]"
     ) -> None:
         request = await stream.recv_message()
         response = await self.create_object(request)
         await stream.send_message(response)
-    
+
     async def __rpc_update_object(
-            self, stream: "grpclib.server.Stream[Object, Object]"
+        self, stream: "grpclib.server.Stream[Object, Object]"
     ) -> None:
         request = await stream.recv_message()
         response = await self.update_object(request)
         await stream.send_message(response)
-    
+
     async def __rpc_delete_object(
-            self,
-            stream: "grpclib.server.Stream[ObjectId, betterproto_lib_google_protobuf.Empty]",
+        self,
+        stream: "grpclib.server.Stream[ObjectId, betterproto_lib_google_protobuf.Empty]",
     ) -> None:
         request = await stream.recv_message()
         response = await self.delete_object(request)
         await stream.send_message(response)
-    
+
     async def __rpc_subscribe_object(
-            self, stream: "grpclib.server.Stream[ObjectId, Object]"
+        self, stream: "grpclib.server.Stream[ObjectId, Object]"
     ) -> None:
         request = await stream.recv_message()
         await self._call_rpc_handler_server_stream(
@@ -215,7 +216,7 @@ class ObjectApiBase(ServiceBase):
             stream,
             request,
         )
-    
+
     def __mapping__(self) -> Dict[str, grpclib.const.Handler]:
         return {
             "/object_api.ObjectApi/list_objects": grpclib.const.Handler(

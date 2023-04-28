@@ -4,6 +4,21 @@ import "google/api/annotations.proto";
 // Wrapper for all primitive types
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
+import "openapiv3/annotations.proto";
+
+option (openapi.v3.document) = {
+  info: {
+    title: "ObjectAPI";
+    version: "1.0";
+    description: "Description of the ObjectAPI";
+    contact: {
+      name: "Contact Name";
+      url: "url";
+      email: "email";
+    }
+  }
+};
+
 
 message Object{
   uint64 id = 1;
@@ -21,15 +36,22 @@ message ObjectId{
 
 service ObjectApi {
 
+  // Comment over service is generated as description
   rpc list_objects (google.protobuf.Empty) returns (ObjectList){
     option (google.api.http) = {
       get: "/api/objects"
+    };
+    option(openapi.v3.operation) = {
+      summary: "List all objects";
     };
   };
 
   rpc get_object (ObjectId) returns (Object){
     option (google.api.http) = {
       get: "/api/object/{id}"
+    };
+    option(openapi.v3.operation) = {
+      summary: "Get an object by id";
     };
   };
 
@@ -38,6 +60,9 @@ service ObjectApi {
       post: "/api/object"
       body: "*"
     };
+    option(openapi.v3.operation) = {
+      summary: "Create an object";
+    };
   };
 
   rpc update_object(Object) returns (Object){
@@ -45,17 +70,27 @@ service ObjectApi {
       put: "/api/object"
       body: "*"
     };
+    option(openapi.v3.operation) = {
+      summary: "Update an object";
+    };
   };
 
   rpc delete_object(ObjectId) returns (google.protobuf.Empty){
     option (google.api.http) = {
       delete: "/api/object/{id}"
     };
+    option(openapi.v3.operation) = {
+      summary: "Delete an object";
+    };
   };
+
 
   rpc subscribe_object(ObjectId) returns (stream Object){
     option (google.api.http) = {
       get: "/api/object/{id}/subscribe"
+    };
+    option(openapi.v3.operation) = {
+      summary: "Subscribe to an object change";
     };
   };
 }

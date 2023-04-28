@@ -3,44 +3,38 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import {proto3} from "@bufbuild/protobuf";
+import { proto3 } from "@bufbuild/protobuf";
 
 /**
  * @generated from message object_api.Object
  */
 export const Object$ = proto3.makeMessageType(
-    "object_api.Object",
-    () => [
-        {no: 1, name: "id", kind: "scalar", T: 4 /* ScalarType.UINT64 */},
-        {no: 2, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */},
-        {
-            no: 3,
-            name: "properties",
-            kind: "map",
-            K: 9 /* ScalarType.STRING */,
-            V: {kind: "scalar", T: 9 /* ScalarType.STRING */}
-        },
-    ],
-    {localName: "Object$"},
+  "object_api.Object",
+  () => [
+    { no: 1, name: "id", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+    { no: 2, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "properties", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "scalar", T: 9 /* ScalarType.STRING */} },
+  ],
+  {localName: "Object$"},
 );
 
 /**
  * @generated from message object_api.ObjectList
  */
 export const ObjectList = proto3.makeMessageType(
-    "object_api.ObjectList",
-    () => [
-        {no: 1, name: "objects", kind: "message", T: Object$, repeated: true},
-    ],
+  "object_api.ObjectList",
+  () => [
+    { no: 1, name: "objects", kind: "message", T: Object$, repeated: true },
+  ],
 );
 
 /**
  * @generated from message object_api.ObjectId
  */
 export const ObjectId = proto3.makeMessageType(
-    "object_api.ObjectId",
-    () => [
-        {no: 1, name: "id", kind: "scalar", T: 4 /* ScalarType.UINT64 */},
-    ],
+  "object_api.ObjectId",
+  () => [
+    { no: 1, name: "id", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+  ],
 );
 

@@ -3,69 +3,71 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import {Empty, MethodKind} from "@bufbuild/protobuf";
-import {Object$, ObjectId, ObjectList} from "./service_pb.js";
+import { Empty, MethodKind } from "@bufbuild/protobuf";
+import { Object$, ObjectId, ObjectList } from "./service_pb.js";
 
 /**
  * @generated from service object_api.ObjectApi
  */
 export declare const ObjectApi: {
-    readonly typeName: "object_api.ObjectApi",
-    readonly methods: {
-        /**
-         * @generated from rpc object_api.ObjectApi.list_objects
-         */
-        readonly list_objects: {
-            readonly name: "list_objects",
-            readonly I: typeof Empty,
-            readonly O: typeof ObjectList,
-            readonly kind: MethodKind.Unary,
-        },
-        /**
-         * @generated from rpc object_api.ObjectApi.get_object
-         */
-        readonly get_object: {
-            readonly name: "get_object",
-            readonly I: typeof ObjectId,
-            readonly O: typeof Object$,
-            readonly kind: MethodKind.Unary,
-        },
-        /**
-         * @generated from rpc object_api.ObjectApi.create_object
-         */
-        readonly create_object: {
-            readonly name: "create_object",
-            readonly I: typeof Object$,
-            readonly O: typeof Object$,
-            readonly kind: MethodKind.Unary,
-        },
-        /**
-         * @generated from rpc object_api.ObjectApi.update_object
-         */
-        readonly update_object: {
-            readonly name: "update_object",
-            readonly I: typeof Object$,
-            readonly O: typeof Object$,
-            readonly kind: MethodKind.Unary,
-        },
-        /**
-         * @generated from rpc object_api.ObjectApi.delete_object
-         */
-        readonly delete_object: {
-            readonly name: "delete_object",
-            readonly I: typeof ObjectId,
-            readonly O: typeof Empty,
-            readonly kind: MethodKind.Unary,
-        },
-        /**
-         * @generated from rpc object_api.ObjectApi.subscribe_object
-         */
-        readonly subscribe_object: {
-            readonly name: "subscribe_object",
-            readonly I: typeof ObjectId,
-            readonly O: typeof Object$,
-            readonly kind: MethodKind.ServerStreaming,
-        },
-    }
+  readonly typeName: "object_api.ObjectApi",
+  readonly methods: {
+    /**
+     * Comment over service is generated as description
+     *
+     * @generated from rpc object_api.ObjectApi.list_objects
+     */
+    readonly list_objects: {
+      readonly name: "list_objects",
+      readonly I: typeof Empty,
+      readonly O: typeof ObjectList,
+      readonly kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc object_api.ObjectApi.get_object
+     */
+    readonly get_object: {
+      readonly name: "get_object",
+      readonly I: typeof ObjectId,
+      readonly O: typeof Object$,
+      readonly kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc object_api.ObjectApi.create_object
+     */
+    readonly create_object: {
+      readonly name: "create_object",
+      readonly I: typeof Object$,
+      readonly O: typeof Object$,
+      readonly kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc object_api.ObjectApi.update_object
+     */
+    readonly update_object: {
+      readonly name: "update_object",
+      readonly I: typeof Object$,
+      readonly O: typeof Object$,
+      readonly kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc object_api.ObjectApi.delete_object
+     */
+    readonly delete_object: {
+      readonly name: "delete_object",
+      readonly I: typeof ObjectId,
+      readonly O: typeof Empty,
+      readonly kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc object_api.ObjectApi.subscribe_object
+     */
+    readonly subscribe_object: {
+      readonly name: "subscribe_object",
+      readonly I: typeof ObjectId,
+      readonly O: typeof Object$,
+      readonly kind: MethodKind.ServerStreaming,
+    },
+  }
 };
 

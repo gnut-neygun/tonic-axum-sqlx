@@ -3,90 +3,88 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type {
-    BinaryReadOptions,
-    FieldList,
-    JsonReadOptions,
-    JsonValue,
-    PartialMessage,
-    PlainMessage
-} from "@bufbuild/protobuf";
-import {Message, proto3} from "@bufbuild/protobuf";
+import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
+import { Message, proto3 } from "@bufbuild/protobuf";
 
 /**
  * @generated from message object_api.Object
  */
 export declare class Object$ extends Message<Object$> {
-    static readonly runtime: typeof proto3;
-    static readonly typeName = "object_api.Object";
-    static readonly fields: FieldList;
-    /**
-     * @generated from field: uint64 id = 1;
-     */
-    id: bigint;
-    /**
-     * @generated from field: string name = 2;
-     */
-    name: string;
-    /**
-     * @generated from field: map<string, string> properties = 3;
-     */
-    properties: { [key: string]: string };
+  /**
+   * @generated from field: uint64 id = 1;
+   */
+  id: bigint;
 
-    constructor(data?: PartialMessage<Object$>);
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
 
-    static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Object$;
+  /**
+   * @generated from field: map<string, string> properties = 3;
+   */
+  properties: { [key: string]: string };
 
-    static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Object$;
+  constructor(data?: PartialMessage<Object$>);
 
-    static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Object$;
+  static readonly runtime: typeof proto3;
+  static readonly typeName = "object_api.Object";
+  static readonly fields: FieldList;
 
-    static equals(a: Object$ | PlainMessage<Object$> | undefined, b: Object$ | PlainMessage<Object$> | undefined): boolean;
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Object$;
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Object$;
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Object$;
+
+  static equals(a: Object$ | PlainMessage<Object$> | undefined, b: Object$ | PlainMessage<Object$> | undefined): boolean;
 }
 
 /**
  * @generated from message object_api.ObjectList
  */
 export declare class ObjectList extends Message<ObjectList> {
-    static readonly runtime: typeof proto3;
-    static readonly typeName = "object_api.ObjectList";
-    static readonly fields: FieldList;
-    /**
-     * @generated from field: repeated object_api.Object objects = 1;
-     */
-    objects: Object$[];
+  /**
+   * @generated from field: repeated object_api.Object objects = 1;
+   */
+  objects: Object$[];
 
-    constructor(data?: PartialMessage<ObjectList>);
+  constructor(data?: PartialMessage<ObjectList>);
 
-    static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ObjectList;
+  static readonly runtime: typeof proto3;
+  static readonly typeName = "object_api.ObjectList";
+  static readonly fields: FieldList;
 
-    static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ObjectList;
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ObjectList;
 
-    static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ObjectList;
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ObjectList;
 
-    static equals(a: ObjectList | PlainMessage<ObjectList> | undefined, b: ObjectList | PlainMessage<ObjectList> | undefined): boolean;
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ObjectList;
+
+  static equals(a: ObjectList | PlainMessage<ObjectList> | undefined, b: ObjectList | PlainMessage<ObjectList> | undefined): boolean;
 }
 
 /**
  * @generated from message object_api.ObjectId
  */
 export declare class ObjectId extends Message<ObjectId> {
-    static readonly runtime: typeof proto3;
-    static readonly typeName = "object_api.ObjectId";
-    static readonly fields: FieldList;
-    /**
-     * @generated from field: uint64 id = 1;
-     */
-    id: bigint;
+  /**
+   * @generated from field: uint64 id = 1;
+   */
+  id: bigint;
 
-    constructor(data?: PartialMessage<ObjectId>);
+  constructor(data?: PartialMessage<ObjectId>);
 
-    static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ObjectId;
+  static readonly runtime: typeof proto3;
+  static readonly typeName = "object_api.ObjectId";
+  static readonly fields: FieldList;
 
-    static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ObjectId;
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ObjectId;
 
-    static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ObjectId;
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ObjectId;
 
-    static equals(a: ObjectId | PlainMessage<ObjectId> | undefined, b: ObjectId | PlainMessage<ObjectId> | undefined): boolean;
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ObjectId;
+
+  static equals(a: ObjectId | PlainMessage<ObjectId> | undefined, b: ObjectId | PlainMessage<ObjectId> | undefined): boolean;
 }
 

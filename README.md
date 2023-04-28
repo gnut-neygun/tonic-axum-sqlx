@@ -162,3 +162,9 @@ We provide different tasks:
 - `cargo make format`: We use rustfmt to format rust code
 
 Refer to *Makefile.toml* to see all the available tasks
+
+## Misc
+
+- Refer to [Gnostic Repo](https://github.com/google/gnostic/tree/main/cmd/protoc-gen-openapi/examples/tests) to know how
+  to annotate
+  proto files to generate API schemas

@@ -18,15 +18,8 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type {
-    BinaryReadOptions,
-    FieldList,
-    JsonReadOptions,
-    JsonValue,
-    PartialMessage,
-    PlainMessage
-} from "@bufbuild/protobuf";
-import {Message, proto3} from "@bufbuild/protobuf";
+import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
+import { Message, proto3 } from "@bufbuild/protobuf";
 
 /**
  * Defines the HTTP configuration for an API service. It contains a list of
@@ -36,38 +29,40 @@ import {Message, proto3} from "@bufbuild/protobuf";
  * @generated from message google.api.Http
  */
 export declare class Http extends Message<Http> {
-    static readonly runtime: typeof proto3;
-    static readonly typeName = "google.api.Http";
-    static readonly fields: FieldList;
-    /**
-     * A list of HTTP configuration rules that apply to individual API methods.
-     *
-     * **NOTE:** All service configuration rules follow "last one wins" order.
-     *
-     * @generated from field: repeated google.api.HttpRule rules = 1;
-     */
-    rules: HttpRule[];
-    /**
-     * When set to true, URL path parameters will be fully URI-decoded except in
-     * cases of single segment matches in reserved expansion, where "%2F" will be
-     * left encoded.
-     *
-     * The default behavior is to not decode RFC 6570 reserved characters in multi
-     * segment matches.
-     *
-     * @generated from field: bool fully_decode_reserved_expansion = 2;
-     */
-    fullyDecodeReservedExpansion: boolean;
+  /**
+   * A list of HTTP configuration rules that apply to individual API methods.
+   *
+   * **NOTE:** All service configuration rules follow "last one wins" order.
+   *
+   * @generated from field: repeated google.api.HttpRule rules = 1;
+   */
+  rules: HttpRule[];
 
-    constructor(data?: PartialMessage<Http>);
+  /**
+   * When set to true, URL path parameters will be fully URI-decoded except in
+   * cases of single segment matches in reserved expansion, where "%2F" will be
+   * left encoded.
+   *
+   * The default behavior is to not decode RFC 6570 reserved characters in multi
+   * segment matches.
+   *
+   * @generated from field: bool fully_decode_reserved_expansion = 2;
+   */
+  fullyDecodeReservedExpansion: boolean;
 
-    static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Http;
+  constructor(data?: PartialMessage<Http>);
 
-    static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Http;
+  static readonly runtime: typeof proto3;
+  static readonly typeName = "google.api.Http";
+  static readonly fields: FieldList;
 
-    static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Http;
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Http;
 
-    static equals(a: Http | PlainMessage<Http> | undefined, b: Http | PlainMessage<Http> | undefined): boolean;
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Http;
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Http;
+
+  static equals(a: Http | PlainMessage<Http> | undefined, b: Http | PlainMessage<Http> | undefined): boolean;
 }
 
 /**
@@ -344,117 +339,122 @@ export declare class Http extends Message<Http> {
  * @generated from message google.api.HttpRule
  */
 export declare class HttpRule extends Message<HttpRule> {
-    static readonly runtime: typeof proto3;
-    static readonly typeName = "google.api.HttpRule";
-    static readonly fields: FieldList;
-    /**
-     * Selects a method to which this rule applies.
-     *
-     * Refer to [selector][google.api.DocumentationRule.selector] for syntax details.
-     *
-     * @generated from field: string selector = 1;
-     */
-    selector: string;
-    /**
-     * Determines the URL pattern is matched by this rules. This pattern can be
-     * used with any of the {get|put|post|delete|patch} methods. A custom method
-     * can be defined using the 'custom' field.
-     *
-     * @generated from oneof google.api.HttpRule.pattern
-     */
-    pattern: {
-        /**
-         * Maps to HTTP GET. Used for listing and getting information about
-         * resources.
-         *
-         * @generated from field: string get = 2;
-         */
-        value: string;
-        case: "get";
-    } | {
-        /**
-         * Maps to HTTP PUT. Used for replacing a resource.
-         *
-         * @generated from field: string put = 3;
-         */
-        value: string;
-        case: "put";
-    } | {
-        /**
-         * Maps to HTTP POST. Used for creating a resource or performing an action.
-         *
-         * @generated from field: string post = 4;
-         */
-        value: string;
-        case: "post";
-    } | {
-        /**
-         * Maps to HTTP DELETE. Used for deleting a resource.
-         *
-         * @generated from field: string delete = 5;
-         */
-        value: string;
-        case: "delete";
-    } | {
-        /**
-         * Maps to HTTP PATCH. Used for updating a resource.
-         *
-         * @generated from field: string patch = 6;
-         */
-        value: string;
-        case: "patch";
-    } | {
-        /**
-         * The custom pattern is used for specifying an HTTP method that is not
-         * included in the `pattern` field, such as HEAD, or "*" to leave the
-         * HTTP method unspecified for this rule. The wild-card rule is useful
-         * for services that provide content to Web (HTML) clients.
-         *
-         * @generated from field: google.api.CustomHttpPattern custom = 8;
-         */
-        value: CustomHttpPattern;
-        case: "custom";
-    } | { case: undefined; value?: undefined };
-    /**
-     * The name of the request field whose value is mapped to the HTTP request
-     * body, or `*` for mapping all request fields not captured by the path
-     * pattern to the HTTP body, or omitted for not having any HTTP request body.
-     *
-     * NOTE: the referred field must be present at the top-level of the request
-     * message type.
-     *
-     * @generated from field: string body = 7;
-     */
-    body: string;
-    /**
-     * Optional. The name of the response field whose value is mapped to the HTTP
-     * response body. When omitted, the entire response message will be used
-     * as the HTTP response body.
-     *
-     * NOTE: The referred field must be present at the top-level of the response
-     * message type.
-     *
-     * @generated from field: string response_body = 12;
-     */
-    responseBody: string;
-    /**
-     * Additional HTTP bindings for the selector. Nested bindings must
-     * not contain an `additional_bindings` field themselves (that is,
-     * the nesting may only be one level deep).
-     *
-     * @generated from field: repeated google.api.HttpRule additional_bindings = 11;
-     */
-    additionalBindings: HttpRule[];
+  /**
+   * Selects a method to which this rule applies.
+   *
+   * Refer to [selector][google.api.DocumentationRule.selector] for syntax details.
+   *
+   * @generated from field: string selector = 1;
+   */
+  selector: string;
 
-    constructor(data?: PartialMessage<HttpRule>);
+  /**
+   * Determines the URL pattern is matched by this rules. This pattern can be
+   * used with any of the {get|put|post|delete|patch} methods. A custom method
+   * can be defined using the 'custom' field.
+   *
+   * @generated from oneof google.api.HttpRule.pattern
+   */
+  pattern: {
+    /**
+     * Maps to HTTP GET. Used for listing and getting information about
+     * resources.
+     *
+     * @generated from field: string get = 2;
+     */
+    value: string;
+    case: "get";
+  } | {
+    /**
+     * Maps to HTTP PUT. Used for replacing a resource.
+     *
+     * @generated from field: string put = 3;
+     */
+    value: string;
+    case: "put";
+  } | {
+    /**
+     * Maps to HTTP POST. Used for creating a resource or performing an action.
+     *
+     * @generated from field: string post = 4;
+     */
+    value: string;
+    case: "post";
+  } | {
+    /**
+     * Maps to HTTP DELETE. Used for deleting a resource.
+     *
+     * @generated from field: string delete = 5;
+     */
+    value: string;
+    case: "delete";
+  } | {
+    /**
+     * Maps to HTTP PATCH. Used for updating a resource.
+     *
+     * @generated from field: string patch = 6;
+     */
+    value: string;
+    case: "patch";
+  } | {
+    /**
+     * The custom pattern is used for specifying an HTTP method that is not
+     * included in the `pattern` field, such as HEAD, or "*" to leave the
+     * HTTP method unspecified for this rule. The wild-card rule is useful
+     * for services that provide content to Web (HTML) clients.
+     *
+     * @generated from field: google.api.CustomHttpPattern custom = 8;
+     */
+    value: CustomHttpPattern;
+    case: "custom";
+  } | { case: undefined; value?: undefined };
 
-    static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): HttpRule;
+  /**
+   * The name of the request field whose value is mapped to the HTTP request
+   * body, or `*` for mapping all request fields not captured by the path
+   * pattern to the HTTP body, or omitted for not having any HTTP request body.
+   *
+   * NOTE: the referred field must be present at the top-level of the request
+   * message type.
+   *
+   * @generated from field: string body = 7;
+   */
+  body: string;
 
-    static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): HttpRule;
+  /**
+   * Optional. The name of the response field whose value is mapped to the HTTP
+   * response body. When omitted, the entire response message will be used
+   * as the HTTP response body.
+   *
+   * NOTE: The referred field must be present at the top-level of the response
+   * message type.
+   *
+   * @generated from field: string response_body = 12;
+   */
+  responseBody: string;
 
-    static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): HttpRule;
+  /**
+   * Additional HTTP bindings for the selector. Nested bindings must
+   * not contain an `additional_bindings` field themselves (that is,
+   * the nesting may only be one level deep).
+   *
+   * @generated from field: repeated google.api.HttpRule additional_bindings = 11;
+   */
+  additionalBindings: HttpRule[];
 
-    static equals(a: HttpRule | PlainMessage<HttpRule> | undefined, b: HttpRule | PlainMessage<HttpRule> | undefined): boolean;
+  constructor(data?: PartialMessage<HttpRule>);
+
+  static readonly runtime: typeof proto3;
+  static readonly typeName = "google.api.HttpRule";
+  static readonly fields: FieldList;
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): HttpRule;
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): HttpRule;
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): HttpRule;
+
+  static equals(a: HttpRule | PlainMessage<HttpRule> | undefined, b: HttpRule | PlainMessage<HttpRule> | undefined): boolean;
 }
 
 /**
@@ -463,30 +463,32 @@ export declare class HttpRule extends Message<HttpRule> {
  * @generated from message google.api.CustomHttpPattern
  */
 export declare class CustomHttpPattern extends Message<CustomHttpPattern> {
-    static readonly runtime: typeof proto3;
-    static readonly typeName = "google.api.CustomHttpPattern";
-    static readonly fields: FieldList;
-    /**
-     * The name of this custom HTTP verb.
-     *
-     * @generated from field: string kind = 1;
-     */
-    kind: string;
-    /**
-     * The path matched by this custom verb.
-     *
-     * @generated from field: string path = 2;
-     */
-    path: string;
+  /**
+   * The name of this custom HTTP verb.
+   *
+   * @generated from field: string kind = 1;
+   */
+  kind: string;
 
-    constructor(data?: PartialMessage<CustomHttpPattern>);
+  /**
+   * The path matched by this custom verb.
+   *
+   * @generated from field: string path = 2;
+   */
+  path: string;
 
-    static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CustomHttpPattern;
+  constructor(data?: PartialMessage<CustomHttpPattern>);
 
-    static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CustomHttpPattern;
+  static readonly runtime: typeof proto3;
+  static readonly typeName = "google.api.CustomHttpPattern";
+  static readonly fields: FieldList;
 
-    static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CustomHttpPattern;
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CustomHttpPattern;
 
-    static equals(a: CustomHttpPattern | PlainMessage<CustomHttpPattern> | undefined, b: CustomHttpPattern | PlainMessage<CustomHttpPattern> | undefined): boolean;
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CustomHttpPattern;
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CustomHttpPattern;
+
+  static equals(a: CustomHttpPattern | PlainMessage<CustomHttpPattern> | undefined, b: CustomHttpPattern | PlainMessage<CustomHttpPattern> | undefined): boolean;
 }
 

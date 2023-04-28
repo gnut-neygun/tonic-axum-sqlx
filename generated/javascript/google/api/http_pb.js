@@ -18,7 +18,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import {proto3} from "@bufbuild/protobuf";
+import { proto3 } from "@bufbuild/protobuf";
 
 /**
  * Defines the HTTP configuration for an API service. It contains a list of
@@ -28,11 +28,11 @@ import {proto3} from "@bufbuild/protobuf";
  * @generated from message google.api.Http
  */
 export const Http = proto3.makeMessageType(
-    "google.api.Http",
-    () => [
-        {no: 1, name: "rules", kind: "message", T: HttpRule, repeated: true},
-        {no: 2, name: "fully_decode_reserved_expansion", kind: "scalar", T: 8 /* ScalarType.BOOL */},
-    ],
+  "google.api.Http",
+  () => [
+    { no: 1, name: "rules", kind: "message", T: HttpRule, repeated: true },
+    { no: 2, name: "fully_decode_reserved_expansion", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+  ],
 );
 
 /**
@@ -309,19 +309,19 @@ export const Http = proto3.makeMessageType(
  * @generated from message google.api.HttpRule
  */
 export const HttpRule = proto3.makeMessageType(
-    "google.api.HttpRule",
-    () => [
-        {no: 1, name: "selector", kind: "scalar", T: 9 /* ScalarType.STRING */},
-        {no: 2, name: "get", kind: "scalar", T: 9 /* ScalarType.STRING */, oneof: "pattern"},
-        {no: 3, name: "put", kind: "scalar", T: 9 /* ScalarType.STRING */, oneof: "pattern"},
-        {no: 4, name: "post", kind: "scalar", T: 9 /* ScalarType.STRING */, oneof: "pattern"},
-        {no: 5, name: "delete", kind: "scalar", T: 9 /* ScalarType.STRING */, oneof: "pattern"},
-        {no: 6, name: "patch", kind: "scalar", T: 9 /* ScalarType.STRING */, oneof: "pattern"},
-        {no: 8, name: "custom", kind: "message", T: CustomHttpPattern, oneof: "pattern"},
-        {no: 7, name: "body", kind: "scalar", T: 9 /* ScalarType.STRING */},
-        {no: 12, name: "response_body", kind: "scalar", T: 9 /* ScalarType.STRING */},
-        {no: 11, name: "additional_bindings", kind: "message", T: HttpRule, repeated: true},
-    ],
+  "google.api.HttpRule",
+  () => [
+    { no: 1, name: "selector", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "get", kind: "scalar", T: 9 /* ScalarType.STRING */, oneof: "pattern" },
+    { no: 3, name: "put", kind: "scalar", T: 9 /* ScalarType.STRING */, oneof: "pattern" },
+    { no: 4, name: "post", kind: "scalar", T: 9 /* ScalarType.STRING */, oneof: "pattern" },
+    { no: 5, name: "delete", kind: "scalar", T: 9 /* ScalarType.STRING */, oneof: "pattern" },
+    { no: 6, name: "patch", kind: "scalar", T: 9 /* ScalarType.STRING */, oneof: "pattern" },
+    { no: 8, name: "custom", kind: "message", T: CustomHttpPattern, oneof: "pattern" },
+    { no: 7, name: "body", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 12, name: "response_body", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 11, name: "additional_bindings", kind: "message", T: HttpRule, repeated: true },
+  ],
 );
 
 /**
@@ -330,10 +330,10 @@ export const HttpRule = proto3.makeMessageType(
  * @generated from message google.api.CustomHttpPattern
  */
 export const CustomHttpPattern = proto3.makeMessageType(
-    "google.api.CustomHttpPattern",
-    () => [
-        {no: 1, name: "kind", kind: "scalar", T: 9 /* ScalarType.STRING */},
-        {no: 2, name: "path", kind: "scalar", T: 9 /* ScalarType.STRING */},
-    ],
+  "google.api.CustomHttpPattern",
+  () => [
+    { no: 1, name: "kind", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "path", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ],
 );
 

@@ -3,69 +3,71 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import {Empty, MethodKind} from "@bufbuild/protobuf";
-import {Object$, ObjectId, ObjectList} from "./service_pb.js";
+import { Empty, MethodKind } from "@bufbuild/protobuf";
+import { Object$, ObjectId, ObjectList } from "./service_pb.js";
 
 /**
  * @generated from service object_api.ObjectApi
  */
 export const ObjectApi = {
-    typeName: "object_api.ObjectApi",
-    methods: {
-        /**
-         * @generated from rpc object_api.ObjectApi.list_objects
-         */
-        list_objects: {
-            name: "list_objects",
-            I: Empty,
-            O: ObjectList,
-            kind: MethodKind.Unary,
-        },
-        /**
-         * @generated from rpc object_api.ObjectApi.get_object
-         */
-        get_object: {
-            name: "get_object",
-            I: ObjectId,
-            O: Object$,
-            kind: MethodKind.Unary,
-        },
-        /**
-         * @generated from rpc object_api.ObjectApi.create_object
-         */
-        create_object: {
-            name: "create_object",
-            I: Object$,
-            O: Object$,
-            kind: MethodKind.Unary,
-        },
-        /**
-         * @generated from rpc object_api.ObjectApi.update_object
-         */
-        update_object: {
-            name: "update_object",
-            I: Object$,
-            O: Object$,
-            kind: MethodKind.Unary,
-        },
-        /**
-         * @generated from rpc object_api.ObjectApi.delete_object
-         */
-        delete_object: {
-            name: "delete_object",
-            I: ObjectId,
-            O: Empty,
-            kind: MethodKind.Unary,
-        },
-        /**
-         * @generated from rpc object_api.ObjectApi.subscribe_object
-         */
-        subscribe_object: {
-            name: "subscribe_object",
-            I: ObjectId,
-            O: Object$,
-            kind: MethodKind.ServerStreaming,
-        },
-    }
+  typeName: "object_api.ObjectApi",
+  methods: {
+    /**
+     * Comment over service is generated as description
+     *
+     * @generated from rpc object_api.ObjectApi.list_objects
+     */
+    list_objects: {
+      name: "list_objects",
+      I: Empty,
+      O: ObjectList,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc object_api.ObjectApi.get_object
+     */
+    get_object: {
+      name: "get_object",
+      I: ObjectId,
+      O: Object$,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc object_api.ObjectApi.create_object
+     */
+    create_object: {
+      name: "create_object",
+      I: Object$,
+      O: Object$,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc object_api.ObjectApi.update_object
+     */
+    update_object: {
+      name: "update_object",
+      I: Object$,
+      O: Object$,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc object_api.ObjectApi.delete_object
+     */
+    delete_object: {
+      name: "delete_object",
+      I: ObjectId,
+      O: Empty,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc object_api.ObjectApi.subscribe_object
+     */
+    subscribe_object: {
+      name: "subscribe_object",
+      I: ObjectId,
+      O: Object$,
+      kind: MethodKind.ServerStreaming,
+    },
+  }
 } as const;
 
