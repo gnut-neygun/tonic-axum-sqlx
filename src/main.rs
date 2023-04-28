@@ -13,7 +13,7 @@ use sqlx::postgres::PgPoolOptions;
 use tower_http::services::ServeDir;
 
 use routes::ObjectService;
-use tonic_axum_sqlx::generated::object_api::object_api_server::ObjectApiServer;
+use tonic_axum_sqlx::object_api::object_api_server::ObjectApiServer;
 
 use crate::grpc_rest_multiplex::MultiplexService;
 
@@ -59,7 +59,7 @@ async fn main() {
     // Refer to https://github.com/tokio-rs/axum/tree/main/examples/rest-grpc-multiplex
     const FILE_DESCRIPTOR_SET: &[u8] = include_bytes!(concat!(
     env!("CARGO_MANIFEST_DIR"),
-    concat!("/src/generated/object_api_descriptor.bin")
+    concat!("/generated/rust/object_api_descriptor.bin")
     ));
 
     let reflection_service = tonic_reflection::server::Builder::configure()

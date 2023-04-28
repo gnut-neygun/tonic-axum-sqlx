@@ -9,8 +9,8 @@ use sqlx::{Pool, Postgres, query};
 use tonic::{Request, Response, Status};
 use tonic::Code::Aborted;
 
-use tonic_axum_sqlx::generated::object_api::{Object, ObjectId, ObjectList};
-use tonic_axum_sqlx::generated::object_api::object_api_server::ObjectApi;
+use tonic_axum_sqlx::object_api::{Object, ObjectId, ObjectList};
+use tonic_axum_sqlx::object_api::object_api_server::ObjectApi;
 
 use crate::{AppState, SharedState};
 use crate::utils::{convert_to_hashmap, ResponseStream, TonicResponse};

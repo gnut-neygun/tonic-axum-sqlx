@@ -3,7 +3,7 @@ use hyper::body::{Buf, Bytes};
 use hyper::http;
 use prost::bytes::{BufMut, BytesMut};
 
-use tonic_axum_sqlx::generated::object_api::ObjectList;
+use tonic_axum_sqlx::object_api::ObjectList;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

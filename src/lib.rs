@@ -6,4 +6,6 @@
 //! Crate level documentation
 
 /// All the generated rust code goes inside this module
-pub mod generated;
+/// We don't use macro here because IntelliJ Rust can not understand it
+#[path = "../generated/rust/object_api.rs"]
+pub mod object_api;
