@@ -146,3 +146,18 @@ already in provided in Buf repository. Run:
 `buf generate`
 
 And check the output in the *generated* folder
+
+## Task runner
+
+We use [cargo-make](https://github.com/sagiegurari/cargo-make) to manage different project tasks from a centralized
+command line interface. To install it, run:
+
+`cargo install --force cargo-make`
+
+We provide different tasks:
+
+- `cargo make doc` : Generate documentation from code and open it in a browser
+- `cargo make build` : Re-generate code with buf, rebuild the web grpc interface and build the rust code
+- `cargo make generate`: Re-generate code using Buf CLI
+
+Refer to *Makefile.toml* to see all the available tasks

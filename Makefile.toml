@@ -1,0 +1,23 @@
+# Do a full build, tasks.build already implicitly builds rust
+[tasks.build]
+dependencies = [
+    "generate",
+    "build-web",
+]
+
+# Generate API definitions from proto files
+[tasks.generate]
+command = "buf"
+args = ["generate"]
+
+# Build the web client
+[tasks.build-web]
+script = [
+    "cd scripts/web",
+    "npm run build",
+]
+
+# Generate and open docs in browser
+[tasks.doc]
+command = "cargo"
+args = ["doc", "--no-deps", "--open"]

@@ -37,11 +37,9 @@ async fn main() {
         .connect(&db_connection_str)
         .await
         .expect("can't connect to database");
-    let object_service = ObjectService {
-        db: pool
-    };
+    let object_service = ObjectService { db: pool };
     let shared_state = Arc::new(AppState {
-        object_service: object_service.clone()
+        object_service: object_service.clone(),
     });
 
     let project_root_path = Path::new(env!("CARGO_MANIFEST_DIR"));
@@ -49,13 +47,19 @@ async fn main() {
     let axum_service = axum::Router::new()
         .nest("/api", routes::object_route())
         // Serve the static test web site that calls the GRPC
-        .nest_service("/static", get_service(ServeDir::new(project_root_path.join
-        ("assets"))))
+        .nest_service(
+            "/static",
+            get_service(ServeDir::new(project_root_path.join("assets"))),
+        )
         .route("/", get(swagger_ui))
         .route("/docs/openapi.yaml", get(openapi_doc))
         .with_state(shared_state);
 
-    const FILE_DESCRIPTOR_SET: &[u8] = include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"), concat!("/src/generated/object_api_descriptor.bin")));
+    // Refer to https://github.com/tokio-rs/axum/tree/main/examples/rest-grpc-multiplex
+    const FILE_DESCRIPTOR_SET: &[u8] = include_bytes!(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        concat!("/src/generated/object_api_descriptor.bin")
+    ));
 
     let reflection_service = tonic_reflection::server::Builder::configure()
         .register_encoded_file_descriptor_set(FILE_DESCRIPTOR_SET)

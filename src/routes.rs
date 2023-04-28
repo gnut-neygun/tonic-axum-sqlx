@@ -3,17 +3,17 @@ use std::sync::Arc;
 
 use axum::extract::{Path, State};
 use axum::response::IntoResponse;
-use axum::Router;
 use axum::routing::get;
-use sqlx::{Pool, Postgres, query};
-use tonic::{Request, Response, Status};
+use axum::Router;
+use sqlx::{query, Pool, Postgres};
 use tonic::Code::Aborted;
+use tonic::{Request, Response, Status};
 
-use tonic_axum_sqlx::generated::object_api::{Object, ObjectId, ObjectList};
 use tonic_axum_sqlx::generated::object_api::object_api_server::ObjectApi;
+use tonic_axum_sqlx::generated::object_api::{Object, ObjectId, ObjectList};
 
-use crate::{AppState, SharedState};
 use crate::utils::{convert_to_hashmap, ResponseStream, TonicResponse};
+use crate::{AppState, SharedState};
 
 // gRPC Routes
 #[derive(Debug, Clone)]
@@ -28,17 +28,14 @@ impl ObjectApi for ObjectService {
         let my_list = query!("SELECT * FROM object")
             .fetch_all(&self.db)
             .await
-            .map_err(|err|
-                Status::new
-                    (Aborted, err.to_string()))?
+            .map_err(|err| Status::new(Aborted, err.to_string()))?
             .into_iter()
-            .map(|record| {
-                Object {
-                    id: record.id as u64,
-                    name: record.name.unwrap(),
-                    properties: convert_to_hashmap(record.properties.unwrap()),
-                }
-            }).collect();
+            .map(|record| Object {
+                id: record.id as u64,
+                name: record.name.unwrap(),
+                properties: convert_to_hashmap(record.properties.unwrap()),
+            })
+            .collect();
         Ok(Response::new(ObjectList { objects: my_list }))
     }
 
@@ -66,7 +63,10 @@ impl ObjectApi for ObjectService {
 
     type subscribe_objectStream = ResponseStream<Object>;
 
-    async fn subscribe_object(&self, request: Request<ObjectId>) -> Result<Response<Self::subscribe_objectStream>, Status> {
+    async fn subscribe_object(
+        &self,
+        request: Request<ObjectId>,
+    ) -> Result<Response<Self::subscribe_objectStream>, Status> {
         todo!()
     }
 }
@@ -78,17 +78,22 @@ pub fn object_route() -> Router<SharedState> {
         .route("/object/:id", get(get_object))
 }
 
-async fn list_objects(State(state): State<SharedState>) -> Result<TonicResponse<ObjectList>,
-    String> {
+async fn list_objects(
+    State(state): State<SharedState>,
+) -> Result<TonicResponse<ObjectList>, String> {
     let grpc_request = Request::new(());
     let grpc_response = state.object_service.list_objects(grpc_request).await;
-    grpc_response.map(|res| TonicResponse::from(res)).map_err(|status| status.to_string())
+    grpc_response
+        .map(|res| TonicResponse::from(res))
+        .map_err(|status| status.to_string())
 }
 
 async fn get_object(State(state): State<Arc<AppState>>, Path(id): Path<u64>) -> impl IntoResponse {
     let grpc_request = Request::new(ObjectId { id });
     let grpc_response = state.object_service.get_object(grpc_request).await;
-    grpc_response.map(|res| TonicResponse::from(res)).map_err(|status| status.to_string())
+    grpc_response
+        .map(|res| TonicResponse::from(res))
+        .map_err(|status| status.to_string())
 }
 
 async fn create_object(State(state): State<SharedState>) -> impl IntoResponse {

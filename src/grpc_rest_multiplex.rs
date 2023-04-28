@@ -3,11 +3,11 @@ use std::{
     task::{Context, Poll},
 };
 
+use axum::http::Request;
 use axum::{
     http::header::CONTENT_TYPE,
     response::{IntoResponse, Response},
 };
-use axum::http::Request;
 use futures::{future::BoxFuture, ready};
 use tower::Service;
 
@@ -30,9 +30,9 @@ impl<A, B> MultiplexService<A, B> {
 }
 
 impl<A, B> Clone for MultiplexService<A, B>
-    where
-        A: Clone,
-        B: Clone,
+where
+    A: Clone,
+    B: Clone,
 {
     fn clone(&self) -> Self {
         Self {
@@ -46,13 +46,13 @@ impl<A, B> Clone for MultiplexService<A, B>
 }
 
 impl<A, B> Service<Request<hyper::Body>> for MultiplexService<A, B>
-    where
-        A: Service<Request<hyper::Body>, Error=Infallible>,
-        A::Response: IntoResponse,
-        A::Future: Send + 'static,
-        B: Service<Request<hyper::Body>>,
-        B::Response: IntoResponse,
-        B::Future: Send + 'static,
+where
+    A: Service<Request<hyper::Body>, Error = Infallible>,
+    A::Response: IntoResponse,
+    A::Future: Send + 'static,
+    B: Service<Request<hyper::Body>>,
+    B::Response: IntoResponse,
+    B::Future: Send + 'static,
 {
     type Response = Response;
     type Error = B::Error;
