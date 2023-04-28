@@ -1,6 +1,7 @@
 # Do a full build, tasks.build already implicitly builds rust
 [tasks.build]
 dependencies = [
+    "format",
     "generate",
     "build-web",
 ]
@@ -10,12 +11,22 @@ dependencies = [
 command = "buf"
 args = ["generate"]
 
+[tasks.format]
+install_crate = "rustfmt"
+command = "cargo"
+args = ["fmt"]
+
 # Build the web client
 [tasks.build-web]
 script = [
-    "cd scripts/web",
+    "cd examples/web",
     "npm run build",
 ]
+
+# Run rust web client example
+[tasks.example-web]
+command = "cargo"
+args = ["run", "--example", "grpc_webclient"]
 
 # Generate and open docs in browser
 [tasks.doc]

@@ -157,7 +157,8 @@ command line interface. To install it, run:
 We provide different tasks:
 
 - `cargo make doc` : Generate documentation from code and open it in a browser
-- `cargo make build` : Re-generate code with buf, rebuild the web grpc interface and build the rust code
+- `cargo make build` : Re-generate code with buf, rebuild the web grpc interface, format build the rust code
 - `cargo make generate`: Re-generate code using Buf CLI
+- `cargo make format`: We use rustfmt to format rust code
 
 Refer to *Makefile.toml* to see all the available tasks
