@@ -3,17 +3,18 @@ use std::sync::Arc;
 
 use axum::extract::{Path, State};
 use axum::response::IntoResponse;
-use axum::Router;
 use axum::routing::get;
-use sqlx::{Pool, Postgres, query};
-use tonic::{Request, Response, Status};
+use axum::Router;
+use sqlx::{query, Pool, Postgres};
 use tonic::Code::Aborted;
+use tonic::{Request, Response, Status};
+use tower_http::trace::TraceLayer;
 
-use tonic_axum_sqlx::object_api::{Object, ObjectId, ObjectList};
 use tonic_axum_sqlx::object_api::object_api_server::ObjectApi;
+use tonic_axum_sqlx::object_api::{Object, ObjectId, ObjectList};
 
-use crate::{AppState, SharedState};
 use crate::utils::{convert_to_hashmap, ResponseStream, TonicResponse};
+use crate::{AppState, SharedState};
 
 #[derive(Debug, Clone)]
 pub struct ObjectService {
@@ -23,7 +24,6 @@ pub struct ObjectService {
 #[tonic::async_trait]
 impl ObjectApi for ObjectService {
     async fn list_objects(&self, request: Request<()>) -> Result<Response<ObjectList>, Status> {
-        println!("Got a request: {:?}", request);
         let my_list = query!("SELECT * FROM object")
             .fetch_all(&self.db)
             .await
@@ -39,7 +39,6 @@ impl ObjectApi for ObjectService {
     }
 
     async fn get_object(&self, request: Request<ObjectId>) -> Result<Response<Object>, Status> {
-        println!("Got a request: {:?}", request);
         let my_object = Object {
             id: 1,
             name: String::from("apple"),
@@ -75,6 +74,7 @@ pub fn object_route() -> Router<SharedState> {
     Router::new()
         .route("/objects", get(list_objects))
         .route("/object/:id", get(get_object))
+        .layer(TraceLayer::new_for_http()) // logging with tower-http middleware
 }
 
 async fn list_objects(

@@ -11,6 +11,8 @@ use axum::response::IntoResponse;
 use axum::routing::{get, get_service};
 use sqlx::postgres::PgPoolOptions;
 use tower_http::services::ServeDir;
+use tracing_subscriber::layer::SubscriberExt;
+use tracing_subscriber::util::SubscriberInitExt;
 
 use routes::ObjectService;
 use tonic_axum_sqlx::object_api::object_api_server::ObjectApiServer;
@@ -45,6 +47,18 @@ async fn main() {
 
     let project_root_path = Path::new(env!("CARGO_MANIFEST_DIR"));
 
+    // Setup tracing
+    tracing_subscriber::registry()
+        .with(
+            tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| {
+                // axum logs rejections from built-in extractors with the `axum::rejection`
+                // target, at `TRACE` level. `axum::rejection=trace` enables showing those events
+                "example_tracing_aka_logging=debug,tower_http=debug,axum::rejection=trace".into()
+            }),
+        )
+        .with(tracing_subscriber::fmt::layer())
+        .init();
+
     let axum_service = axum::Router::new()
         .nest("/api", routes::object_route())
         // Serve the static test web site that calls the GRPC
@@ -58,8 +72,8 @@ async fn main() {
 
     // Refer to https://github.com/tokio-rs/axum/tree/main/examples/rest-grpc-multiplex
     const FILE_DESCRIPTOR_SET: &[u8] = include_bytes!(concat!(
-    env!("CARGO_MANIFEST_DIR"),
-    concat!("/generated/rust/object_api_descriptor.bin")
+        env!("CARGO_MANIFEST_DIR"),
+        concat!("/generated/rust/object_api_descriptor.bin")
     ));
 
     let reflection_service = tonic_reflection::server::Builder::configure()

@@ -40,8 +40,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 const GRPC_HEADER_SIZE: usize = 5;
 
 fn encode_body<T>(msg: T) -> Bytes
-    where
-        T: prost::Message,
+where
+    T: prost::Message,
 {
     let msg_len = msg.encoded_len();
     let mut buf = BytesMut::with_capacity(GRPC_HEADER_SIZE + msg_len);
@@ -55,8 +55,8 @@ fn encode_body<T>(msg: T) -> Bytes
 }
 
 async fn decode_body<T>(body: hyper::Body) -> T
-    where
-        T: Default + prost::Message,
+where
+    T: Default + prost::Message,
 {
     let mut body = hyper::body::to_bytes(body).await.unwrap();
 
@@ -65,7 +65,7 @@ async fn decode_body<T>(body: hyper::Body) -> T
 
     let len = body.get_u32();
     #[allow(clippy::let_and_return)]
-        let msg = T::decode(&mut body.split_to(len as usize)).unwrap();
+    let msg = T::decode(&mut body.split_to(len as usize)).unwrap();
 
     msg
 }
