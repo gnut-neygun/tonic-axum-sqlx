@@ -10,14 +10,23 @@ plugins:
     opt: paths=source_relative
     # On why need strategy all, See: https://github.com/stephenh/ts-proto/issues/366
     strategy: all
+
   - plugin: buf.build/bufbuild/connect-web
     out: generated/typescript
     opt:
       - target=ts
+
   - plugin: buf.build/bufbuild/es
     out: generated/typescript
     opt:
       - target=ts
+
+  - plugin: buf.build/bufbuild/es
+    out: generated/javascript
+
+  - plugin: buf.build/bufbuild/connect-web
+    out: generated/javascript
+
   - plugin: openapi
     out: generated
     strategy: all
