@@ -1,0 +1,33 @@
+{
+  "db": "PostgreSQL",
+  "12598fb963a3c55030b9890bf93a9086f0f9f599e2587af1797dcfc760114685": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int4"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "properties",
+          "ordinal": 2,
+          "type_info": "Json"
+        }
+      ],
+      "nullable": [
+        false,
+        true,
+        true
+      ],
+      "parameters": {
+        "Left": []
+      }
+    },
+    "query": "SELECT * FROM object"
+  }
+}
