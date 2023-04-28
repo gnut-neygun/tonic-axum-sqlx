@@ -18,6 +18,7 @@ use tonic_axum_sqlx::generated::object_api::object_api_server::ObjectApiServer;
 use crate::grpc_rest_multiplex::MultiplexService;
 
 mod grpc_rest_multiplex;
+/// This module contains routing for gRPC and REST Service
 mod routes;
 mod utils;
 
@@ -57,8 +58,8 @@ async fn main() {
 
     // Refer to https://github.com/tokio-rs/axum/tree/main/examples/rest-grpc-multiplex
     const FILE_DESCRIPTOR_SET: &[u8] = include_bytes!(concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        concat!("/src/generated/object_api_descriptor.bin")
+    env!("CARGO_MANIFEST_DIR"),
+    concat!("/src/generated/object_api_descriptor.bin")
     ));
 
     let reflection_service = tonic_reflection::server::Builder::configure()
@@ -82,11 +83,13 @@ async fn main() {
     }
 }
 
+/// Router handler that responds with OpenAPI doc
 async fn openapi_doc() -> impl IntoResponse {
     let api_doc = include_str!("../generated/openapi.yaml");
     api_doc
 }
 
+/// Router handler that responds with Swagger UI based on OpenAPI Schema
 async fn swagger_ui() -> impl IntoResponse {
     let html_string = include_str!("../assets/swagger.html");
     axum::response::Html(html_string)

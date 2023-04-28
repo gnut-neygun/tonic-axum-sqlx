@@ -31,4 +31,4 @@ args = ["run", "--example", "grpc_webclient"]
 # Generate and open docs in browser
 [tasks.doc]
 command = "cargo"
-args = ["doc", "--no-deps", "--open"]
+args = ["doc", "--no-deps", "--open", "--document-private-items"]

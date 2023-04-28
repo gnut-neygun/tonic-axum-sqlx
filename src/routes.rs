@@ -3,19 +3,18 @@ use std::sync::Arc;
 
 use axum::extract::{Path, State};
 use axum::response::IntoResponse;
-use axum::routing::get;
 use axum::Router;
-use sqlx::{query, Pool, Postgres};
-use tonic::Code::Aborted;
+use axum::routing::get;
+use sqlx::{Pool, Postgres, query};
 use tonic::{Request, Response, Status};
+use tonic::Code::Aborted;
 
-use tonic_axum_sqlx::generated::object_api::object_api_server::ObjectApi;
 use tonic_axum_sqlx::generated::object_api::{Object, ObjectId, ObjectList};
+use tonic_axum_sqlx::generated::object_api::object_api_server::ObjectApi;
 
-use crate::utils::{convert_to_hashmap, ResponseStream, TonicResponse};
 use crate::{AppState, SharedState};
+use crate::utils::{convert_to_hashmap, ResponseStream, TonicResponse};
 
-// gRPC Routes
 #[derive(Debug, Clone)]
 pub struct ObjectService {
     pub(crate) db: Pool<Postgres>,
