@@ -2,3 +2,4 @@
 .idea
 .vscode
 ignored
+__pycache__
