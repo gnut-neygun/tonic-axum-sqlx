@@ -7,8 +7,10 @@ pub struct Object {
     #[prost(string, tag = "2")]
     pub name: ::prost::alloc::string::String,
     #[prost(map = "string, string", tag = "3")]
-    pub properties:
-        ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
+    pub properties: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        ::prost::alloc::string::String,
+    >,
 }
 #[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -27,8 +29,8 @@ pub struct ObjectId {
 /// Generated client implementations.
 pub mod object_api_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::http::Uri;
     use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
     #[derive(Debug, Clone)]
     pub struct ObjectApiClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -72,8 +74,9 @@ pub mod object_api_client {
                     <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
                 >,
             >,
-            <T as tonic::codegen::Service<http::Request<tonic::body::BoxBody>>>::Error:
-                Into<StdError> + Send + Sync,
+            <T as tonic::codegen::Service<
+                http::Request<tonic::body::BoxBody>,
+            >>::Error: Into<StdError> + Send + Sync,
         {
             ObjectApiClient::new(InterceptedService::new(inner, interceptor))
         }
@@ -113,14 +116,19 @@ pub mod object_api_client {
             &mut self,
             request: impl tonic::IntoRequest<()>,
         ) -> std::result::Result<tonic::Response<super::ObjectList>, tonic::Status> {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/object_api.ObjectApi/list_objects");
+            let path = http::uri::PathAndQuery::from_static(
+                "/object_api.ObjectApi/list_objects",
+            );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("object_api.ObjectApi", "list_objects"));
@@ -130,14 +138,19 @@ pub mod object_api_client {
             &mut self,
             request: impl tonic::IntoRequest<super::ObjectId>,
         ) -> std::result::Result<tonic::Response<super::Object>, tonic::Status> {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/object_api.ObjectApi/get_object");
+            let path = http::uri::PathAndQuery::from_static(
+                "/object_api.ObjectApi/get_object",
+            );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("object_api.ObjectApi", "get_object"));
@@ -147,14 +160,19 @@ pub mod object_api_client {
             &mut self,
             request: impl tonic::IntoRequest<super::Object>,
         ) -> std::result::Result<tonic::Response<super::Object>, tonic::Status> {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/object_api.ObjectApi/create_object");
+            let path = http::uri::PathAndQuery::from_static(
+                "/object_api.ObjectApi/create_object",
+            );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("object_api.ObjectApi", "create_object"));
@@ -164,14 +182,19 @@ pub mod object_api_client {
             &mut self,
             request: impl tonic::IntoRequest<super::Object>,
         ) -> std::result::Result<tonic::Response<super::Object>, tonic::Status> {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/object_api.ObjectApi/update_object");
+            let path = http::uri::PathAndQuery::from_static(
+                "/object_api.ObjectApi/update_object",
+            );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("object_api.ObjectApi", "update_object"));
@@ -181,14 +204,19 @@ pub mod object_api_client {
             &mut self,
             request: impl tonic::IntoRequest<super::ObjectId>,
         ) -> std::result::Result<tonic::Response<()>, tonic::Status> {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/object_api.ObjectApi/delete_object");
+            let path = http::uri::PathAndQuery::from_static(
+                "/object_api.ObjectApi/delete_object",
+            );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("object_api.ObjectApi", "delete_object"));
@@ -201,15 +229,19 @@ pub mod object_api_client {
             tonic::Response<tonic::codec::Streaming<super::Object>>,
             tonic::Status,
         > {
-            self.inner.ready().await.map_err(|e| {
-                tonic::Status::new(
-                    tonic::Code::Unknown,
-                    format!("Service was not ready: {}", e.into()),
-                )
-            })?;
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path =
-                http::uri::PathAndQuery::from_static("/object_api.ObjectApi/subscribe_object");
+            let path = http::uri::PathAndQuery::from_static(
+                "/object_api.ObjectApi/subscribe_object",
+            );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("object_api.ObjectApi", "subscribe_object"));
@@ -246,13 +278,18 @@ pub mod object_api_server {
             request: tonic::Request<super::ObjectId>,
         ) -> std::result::Result<tonic::Response<()>, tonic::Status>;
         /// Server streaming response type for the subscribe_object method.
-        type subscribe_objectStream: futures_core::Stream<Item = std::result::Result<super::Object, tonic::Status>>
+        type subscribe_objectStream: futures_core::Stream<
+                Item = std::result::Result<super::Object, tonic::Status>,
+            >
             + Send
             + 'static;
         async fn subscribe_object(
             &self,
             request: tonic::Request<super::ObjectId>,
-        ) -> std::result::Result<tonic::Response<Self::subscribe_objectStream>, tonic::Status>;
+        ) -> std::result::Result<
+            tonic::Response<Self::subscribe_objectStream>,
+            tonic::Status,
+        >;
     }
     #[derive(Debug)]
     pub struct ObjectApiServer<T: ObjectApi> {
@@ -277,7 +314,10 @@ pub mod object_api_server {
                 max_encoding_message_size: None,
             }
         }
-        pub fn with_interceptor<F>(inner: T, interceptor: F) -> InterceptedService<Self, F>
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> InterceptedService<Self, F>
         where
             F: tonic::service::Interceptor,
         {
@@ -333,12 +373,18 @@ pub mod object_api_server {
                 "/object_api.ObjectApi/list_objects" => {
                     #[allow(non_camel_case_types)]
                     struct list_objectsSvc<T: ObjectApi>(pub Arc<T>);
-                    impl<T: ObjectApi> tonic::server::UnaryService<()> for list_objectsSvc<T> {
+                    impl<T: ObjectApi> tonic::server::UnaryService<()>
+                    for list_objectsSvc<T> {
                         type Response = super::ObjectList;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
                         fn call(&mut self, request: tonic::Request<()>) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).list_objects(request).await };
+                            let fut = async move {
+                                (*inner).list_objects(request).await
+                            };
                             Box::pin(fut)
                         }
                     }
@@ -368,9 +414,13 @@ pub mod object_api_server {
                 "/object_api.ObjectApi/get_object" => {
                     #[allow(non_camel_case_types)]
                     struct get_objectSvc<T: ObjectApi>(pub Arc<T>);
-                    impl<T: ObjectApi> tonic::server::UnaryService<super::ObjectId> for get_objectSvc<T> {
+                    impl<T: ObjectApi> tonic::server::UnaryService<super::ObjectId>
+                    for get_objectSvc<T> {
                         type Response = super::Object;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
                         fn call(
                             &mut self,
                             request: tonic::Request<super::ObjectId>,
@@ -406,12 +456,21 @@ pub mod object_api_server {
                 "/object_api.ObjectApi/create_object" => {
                     #[allow(non_camel_case_types)]
                     struct create_objectSvc<T: ObjectApi>(pub Arc<T>);
-                    impl<T: ObjectApi> tonic::server::UnaryService<super::Object> for create_objectSvc<T> {
+                    impl<T: ObjectApi> tonic::server::UnaryService<super::Object>
+                    for create_objectSvc<T> {
                         type Response = super::Object;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(&mut self, request: tonic::Request<super::Object>) -> Self::Future {
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::Object>,
+                        ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).create_object(request).await };
+                            let fut = async move {
+                                (*inner).create_object(request).await
+                            };
                             Box::pin(fut)
                         }
                     }
@@ -441,12 +500,21 @@ pub mod object_api_server {
                 "/object_api.ObjectApi/update_object" => {
                     #[allow(non_camel_case_types)]
                     struct update_objectSvc<T: ObjectApi>(pub Arc<T>);
-                    impl<T: ObjectApi> tonic::server::UnaryService<super::Object> for update_objectSvc<T> {
+                    impl<T: ObjectApi> tonic::server::UnaryService<super::Object>
+                    for update_objectSvc<T> {
                         type Response = super::Object;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(&mut self, request: tonic::Request<super::Object>) -> Self::Future {
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::Object>,
+                        ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).update_object(request).await };
+                            let fut = async move {
+                                (*inner).update_object(request).await
+                            };
                             Box::pin(fut)
                         }
                     }
@@ -476,15 +544,21 @@ pub mod object_api_server {
                 "/object_api.ObjectApi/delete_object" => {
                     #[allow(non_camel_case_types)]
                     struct delete_objectSvc<T: ObjectApi>(pub Arc<T>);
-                    impl<T: ObjectApi> tonic::server::UnaryService<super::ObjectId> for delete_objectSvc<T> {
+                    impl<T: ObjectApi> tonic::server::UnaryService<super::ObjectId>
+                    for delete_objectSvc<T> {
                         type Response = ();
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
                         fn call(
                             &mut self,
                             request: tonic::Request<super::ObjectId>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).delete_object(request).await };
+                            let fut = async move {
+                                (*inner).delete_object(request).await
+                            };
                             Box::pin(fut)
                         }
                     }
@@ -514,19 +588,24 @@ pub mod object_api_server {
                 "/object_api.ObjectApi/subscribe_object" => {
                     #[allow(non_camel_case_types)]
                     struct subscribe_objectSvc<T: ObjectApi>(pub Arc<T>);
-                    impl<T: ObjectApi> tonic::server::ServerStreamingService<super::ObjectId>
-                        for subscribe_objectSvc<T>
-                    {
+                    impl<
+                        T: ObjectApi,
+                    > tonic::server::ServerStreamingService<super::ObjectId>
+                    for subscribe_objectSvc<T> {
                         type Response = super::Object;
                         type ResponseStream = T::subscribe_objectStream;
-                        type Future =
-                            BoxFuture<tonic::Response<Self::ResponseStream>, tonic::Status>;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::ResponseStream>,
+                            tonic::Status,
+                        >;
                         fn call(
                             &mut self,
                             request: tonic::Request<super::ObjectId>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move { (*inner).subscribe_object(request).await };
+                            let fut = async move {
+                                (*inner).subscribe_object(request).await
+                            };
                             Box::pin(fut)
                         }
                     }
@@ -553,14 +632,18 @@ pub mod object_api_server {
                     };
                     Box::pin(fut)
                 }
-                _ => Box::pin(async move {
-                    Ok(http::Response::builder()
-                        .status(200)
-                        .header("grpc-status", "12")
-                        .header("content-type", "application/grpc")
-                        .body(empty_body())
-                        .unwrap())
-                }),
+                _ => {
+                    Box::pin(async move {
+                        Ok(
+                            http::Response::builder()
+                                .status(200)
+                                .header("grpc-status", "12")
+                                .header("content-type", "application/grpc")
+                                .body(empty_body())
+                                .unwrap(),
+                        )
+                    })
+                }
             }
         }
     }

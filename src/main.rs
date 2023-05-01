@@ -14,15 +14,15 @@ use tower_http::services::ServeDir;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 
+use crate::grpc_rest_multiplex::hybrid;
 use routes::ObjectService;
 use tonic_axum_sqlx::object_api::object_api_server::ObjectApiServer;
-
-use crate::grpc_rest_multiplex::MultiplexService;
 
 mod grpc_rest_multiplex;
 /// This module contains routing for gRPC and REST Service
 mod routes;
 mod utils;
+mod websocket;
 
 pub struct AppState {
     object_service: ObjectService,
@@ -41,6 +41,7 @@ async fn main() {
         .await
         .expect("can't connect to database");
     let object_service = ObjectService { db: pool };
+
     let shared_state = Arc::new(AppState {
         object_service: object_service.clone(),
     });
@@ -53,13 +54,14 @@ async fn main() {
             tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| {
                 // axum logs rejections from built-in extractors with the `axum::rejection`
                 // target, at `TRACE` level. `axum::rejection=trace` enables showing those events
-                "example_tracing_aka_logging=debug,tower_http=debug,axum::rejection=trace".into()
+                "tonic-axum-sqlx=debug,tower_http=debug,axum::rejection=trace".into()
             }),
         )
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-    let axum_service = axum::Router::new()
+    let axum_factory_service = axum::Router::new()
+        .merge(websocket::websocket_router())
         .nest("/api", routes::object_route())
         // Serve the static test web site that calls the GRPC
         .nest_service(
@@ -68,7 +70,8 @@ async fn main() {
         )
         .route("/", get(swagger_ui))
         .route("/docs/openapi.yaml", get(openapi_doc))
-        .with_state(shared_state);
+        .with_state(shared_state)
+        .into_make_service_with_connect_info::<SocketAddr>();
 
     // Refer to https://github.com/tokio-rs/axum/tree/main/examples/rest-grpc-multiplex
     const FILE_DESCRIPTOR_SET: &[u8] = include_bytes!(concat!(
@@ -87,10 +90,9 @@ async fn main() {
         .add_service(tonic_web::enable(ObjectApiServer::new(object_service)))
         .into_service();
 
-    let hybrid_service = MultiplexService::new(axum_service, grpc_service);
-
     let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
-    let server = hyper::Server::bind(&addr).serve(tower::make::Shared::new(hybrid_service));
+    let hybrid_service = hybrid(axum_factory_service, grpc_service);
+    let server = hyper::Server::bind(&addr).serve(hybrid_service);
 
     if let Err(e) = server.await {
         eprintln!("server error: {}", e);
