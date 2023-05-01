@@ -11,13 +11,15 @@ use axum::response::IntoResponse;
 use axum::routing::{get, get_service};
 use sqlx::postgres::PgPoolOptions;
 use tower_http::services::ServeDir;
-use tracing_subscriber::layer::SubscriberExt;
-use tracing_subscriber::util::SubscriberInitExt;
+use tracing::Level;
+use tracing_subscriber::FmtSubscriber;
 
 use crate::grpc_rest_multiplex::hybrid;
 use routes::ObjectService;
 use tonic_axum_sqlx::object_api::object_api_server::ObjectApiServer;
 
+/// Logic for multiplexing grpc and normal webrequest based on header.
+/// See https://www.fpcomplete.com/blog/axum-hyper-tonic-tower-part1/
 mod grpc_rest_multiplex;
 /// This module contains routing for gRPC and REST Service
 mod routes;
@@ -46,20 +48,12 @@ async fn main() {
         object_service: object_service.clone(),
     });
 
+    let trace_subscriber = FmtSubscriber::builder()
+        .with_max_level(Level::INFO)
+        .finish();
+    tracing::subscriber::set_global_default(trace_subscriber).unwrap();
+
     let project_root_path = Path::new(env!("CARGO_MANIFEST_DIR"));
-
-    // Setup tracing
-    tracing_subscriber::registry()
-        .with(
-            tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| {
-                // axum logs rejections from built-in extractors with the `axum::rejection`
-                // target, at `TRACE` level. `axum::rejection=trace` enables showing those events
-                "tonic-axum-sqlx=debug,tower_http=debug,axum::rejection=trace".into()
-            }),
-        )
-        .with(tracing_subscriber::fmt::layer())
-        .init();
-
     let axum_factory_service = axum::Router::new()
         .merge(websocket::websocket_router())
         .nest("/api", routes::object_route())

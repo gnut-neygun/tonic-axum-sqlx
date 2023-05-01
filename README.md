@@ -8,7 +8,8 @@ create, read, update, delete, list and subscribe. This project uses:
 - [SQLx + Postgres](https://github.com/launchbadge/sqlx) for the data layer, providing compile-time checked SQL queries
 - [OpenAPI + Swaggger UI](https://swagger.io/tools/swagger-ui/) for API documentation. The OpenAPI spec is
   auto-generated from the protobuf definitions.
--
+- [Ezsockets](https://github.com/gbaranski/ezsockets) A high level declarative API for building websocket client and
+  servers based on [tokio-tungstenite](https://github.com/snapview/tokio-tungstenite)
 - [Buf CLI](https://buf.build/docs/tutorials/getting-started-with-buf-cli) for Protobuf API management
 - [Python-Betterproto](https://github.com/danielgtaylor/python-betterproto) for human-readable python client
   generated from protobufs.
@@ -157,11 +158,17 @@ command line interface. To install it, run:
 We provide different tasks:
 
 - `cargo make doc` : Generate documentation from code and open it in a browser
-- `cargo make build` : Re-generate code with buf, rebuild the web grpc interface, format build the rust code
+- `cargo make build` : Re-generate code with buf, rebuild the web grpc interface, lint and format build the rust code
 - `cargo make generate`: Re-generate code using Buf CLI
 - `cargo make format`: We use rustfmt to format rust code
+- `cargo make lint`: Lint all target with Clippy
 
 Refer to *Makefile.toml* to see all the available tasks
+
+## Formatting and clippy
+
+Rust provides a standard formatting tool (Rustfmt) and linting tool (Clippy) out of the box. Make sure to configure
+your IDE to use those instead of the default one.
 
 ## Misc
 

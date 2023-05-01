@@ -1,6 +1,7 @@
 # Do a full build, tasks.build already implicitly builds rust
 [tasks.build]
 dependencies = [
+    "lint",
     "format",
     "generate",
     "build-web",
@@ -22,6 +23,11 @@ script = [
     "cd examples/web",
     "npm run build",
 ]
+
+[tasks.lint]
+install_crate = "clippy"
+command = "cargo"
+args = ["clippy", "--all-targets", "--all-features", "--", "-D", "warnings"]
 
 # Run rust web client example
 [tasks.example-web]

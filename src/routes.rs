@@ -114,7 +114,7 @@ async fn list_objects(State(state): State<SharedState>) -> impl IntoResponse {
     let grpc_request = Request::new(());
     let grpc_response = state.object_service.list_objects(grpc_request).await;
     grpc_response
-        .map(|res| AxumResponse::from(res))
+        .map(AxumResponse::from)
         .map_err(|status| status.to_string())
 }
 
@@ -122,7 +122,7 @@ async fn get_object(State(state): State<Arc<AppState>>, Path(id): Path<u64>) -> 
     let grpc_request = Request::new(ObjectId { id });
     let grpc_response = state.object_service.get_object(grpc_request).await;
     grpc_response
-        .map(|res| AxumResponse::from(res))
+        .map(AxumResponse::from)
         .map_err(|status| status.to_string())
 }
 
@@ -133,7 +133,7 @@ async fn create_object(
     let grpc_request = Request::new(input);
     let grpc_response = state.object_service.create_object(grpc_request).await;
     grpc_response
-        .map(|res| AxumResponse::from(res))
+        .map(AxumResponse::from)
         .map_err(|status| status.to_string())
 }
 
@@ -144,7 +144,7 @@ async fn update_object(
     let grpc_request = Request::new(input);
     let grpc_response = state.object_service.update_object(grpc_request).await;
     grpc_response
-        .map(|res| AxumResponse::from(res))
+        .map(AxumResponse::from)
         .map_err(|status| status.to_string())
 }
 
@@ -152,6 +152,6 @@ async fn delete_object(State(state): State<SharedState>, Path(id): Path<u64>) ->
     let grpc_request = Request::new(ObjectId { id });
     let grpc_response = state.object_service.delete_object(grpc_request).await;
     grpc_response
-        .map(|res| AxumResponse::from(res))
+        .map(AxumResponse::from)
         .map_err(|status| status.to_string())
 }

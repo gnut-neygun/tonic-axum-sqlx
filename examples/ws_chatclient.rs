@@ -1,6 +1,8 @@
 use async_trait::async_trait;
 use ezsockets::ClientConfig;
 use std::io::BufRead;
+use tracing::Level;
+use tracing_subscriber::FmtSubscriber;
 
 struct Client {}
 
@@ -26,7 +28,10 @@ impl ezsockets::ClientExt for Client {
 
 #[tokio::main]
 async fn main() {
-    tracing_subscriber::fmt::init();
+    let trace_subscriber = FmtSubscriber::builder()
+        .with_max_level(Level::INFO)
+        .finish();
+    tracing::subscriber::set_global_default(trace_subscriber).unwrap();
     let config = ClientConfig::new("ws://localhost:3000/websocket");
     let (handle, future) = ezsockets::connect(|_client| Client {}, config).await;
     tokio::spawn(async move {

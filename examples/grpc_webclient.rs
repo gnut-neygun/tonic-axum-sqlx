@@ -7,8 +7,6 @@ use tonic_axum_sqlx::object_api::ObjectList;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let msg = ();
-
     // a good old http/1.1 request
     let request = http::Request::builder()
         .version(http::Version::HTTP_11)
@@ -16,7 +14,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .uri("http://localhost:3000/object_api.ObjectApi/list_objects")
         .header(CONTENT_TYPE, "application/grpc-web")
         .header(ACCEPT, "application/grpc-web")
-        .body(hyper::Body::from(encode_body(msg)))
+        .body(hyper::Body::from(encode_body(())))
         .unwrap();
 
     let client = hyper::Client::new();

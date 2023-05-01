@@ -83,10 +83,9 @@ pub fn websocket_router<S>() -> Router<S> {
         sessions: HashMap::new(),
         handle,
     });
-    let app = Router::new()
+    Router::new()
         .route("/websocket", get(websocket_handler))
-        .with_state(websocket_server);
-    app
+        .with_state(websocket_server)
 }
 
 async fn websocket_handler(
